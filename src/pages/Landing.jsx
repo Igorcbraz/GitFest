@@ -8,12 +8,14 @@ import { supabase } from '../service/client'
 import Carrousel1 from '../assets/images/preview.jpg'
 
 export const Landing = () => {
-  const { state, dispatch } = useContext(AuthContext)
+  const { dispatch } = useContext(AuthContext)
 
-  const signInWithGithub = async (e) => {
-    e.preventDefault()
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github'
+  const signInWithGithub = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${window.location.origin}/home`
+      }
     })
 
     if (error) {
@@ -23,12 +25,8 @@ export const Landing = () => {
 
     dispatch({
       type: 'LOGIN',
-      payload: { user: data, isLoggedIn: true }
+      payload: { isLoggedIn: true }
     })
-  }
-
-  if (state.isLoggedIn) {
-    return window.location.href = '/home'
   }
 
   return (
