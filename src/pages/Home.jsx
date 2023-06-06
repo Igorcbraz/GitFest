@@ -1,15 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react'
+import {
+  ArrowLeftOnRectangleIcon,
+  ArrowDownTrayIcon
+  // ShareIcon
+} from '@heroicons/react/24/solid'
+
 import { AuthContext } from '../App'
 import { supabase } from '../service/client'
-import {
-  ArrowLeftOnRectangleIcon
-} from '@heroicons/react/24/solid'
+
+import { DarkTemplate } from '../components/Templates/Dark/index.jsx'
 
 export const Home = () => {
   const { dispatch } = useContext(AuthContext)
   const [user, setUser] = useState({})
   const [info, setInfo] = useState({})
   const [repositories, setRepositories] = useState([])
+  const [darkTemplateNames, setDarkTemplateNames] = useState([])
+
 
   useEffect(() => {
     getSession()
@@ -90,6 +97,7 @@ export const Home = () => {
     })
 
     setRepositories(formatedData)
+    setDarkTemplateNames(formatedData.map(item => item.name))
     console.log(repositories)
   }
 
@@ -105,6 +113,107 @@ export const Home = () => {
       type: 'LOGOUT'
     })
     return window.location.href = '/'
+  }
+
+  const handleDownloadSvg = (templateId) => {
+    const svg = document.getElementById(templateId)
+    const canvas = document.createElement('canvas')
+
+    if (!svg) {
+      return console.error('svg not found')
+    }
+
+    canvas.width = svg.clientWidth
+    canvas.height = svg.clientHeight
+
+    const styleTag = svg.querySelector('style')
+    const cssStyles = `
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        fill: #2f2f2f;
+      }
+
+      .cls-11, .cls-12, .cls-13, .cls-2, .cls-4, .cls-8, .cls-9 {
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        opacity: 0.2;
+      }
+
+      .cls-4 {
+        fill: none;
+        stroke: #2f2f2f;
+        stroke-width: 1px;
+      }
+
+      .cls-5 {
+        font-size: 118.249px;
+      }
+
+      .cls-13, .cls-5, .cls-6, .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-5, .cls-6 {
+        font-family: ø, Lolapeluza;
+      }
+
+      .cls-6 {
+        font-size: 123.943px;
+      }
+
+      .cls-8 {
+        fill: #653371;
+      }
+
+      .cls-10, .cls-9 {
+        fill: #fdf9ff;
+      }
+
+      .cls-10 {
+        font-size: 63.488px;
+        font-family: "Bebas Kai";
+      }
+
+      .cls-11 {
+        fill: #b074ad;
+      }
+
+      .cls-12 {
+        fill: #dd9f87;
+      }
+    `
+    styleTag.textContent = cssStyles
+
+    const serializer = new XMLSerializer()
+    let source = serializer.serializeToString(svg)
+
+    // Adiciona os namespaces se necessário
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+      source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"')
+    }
+    if (!source.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)) {
+      source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"')
+    }
+
+    source = '<?xml version="1.0" standalone="no"?>\r\n' + source
+
+    const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source)
+
+    const img = new Image()
+    img.src = url
+
+    img.onload = function() {
+      canvas.getContext('2d')?.drawImage(img, 0, 0)
+      const a = document.createElement('a')
+      a.download = 'dark-template.png'
+      a.href = canvas.toDataURL()
+      a.click()
+    }
   }
 
   if (!user) {
@@ -124,24 +233,51 @@ export const Home = () => {
   }
 
   return (
-    <header className='bg-white'>
-      <section className='flex justify-between items-center  p-6 h-fit w-screen'>
-        <div className='w-full'>
-          <h1 className='text-3xl font-bold text-start text-gray-800'>Bem-vindo(a) <span className='text-primary-400'>{user.user_metadata?.preferred_username}</span></h1>
-          <p className='text-lg text-start text-gray-600 mt-2'>Você está logado(a) com o e-mail <span className='text-primary-400'>{user.email}</span></p>
-        </div>
-        <div className='flex justify-end items-center w-full h-10'>
+    <>
+      <header className='bg-white'>
+        <section className='flex justify-between items-center  p-6 h-fit w-screen'>
+          <div className='w-full'>
+            <h1 className='text-3xl font-bold text-start text-gray-800'>Bem-vindo(a) <span className='text-primary-400'>{user.user_metadata?.preferred_username}</span></h1>
+            <p className='text-lg text-start text-gray-600 mt-2'>{info.bio}</p>
+          </div>
+          <div className='flex justify-end items-center w-full h-10'>
+            <button
+              className='flex justify-between w-fit bg-primary-100 text-primary-300 font-bold py-2 px-6 rounded transition hover:bg-primary-200 hover:text-primary-100 hover:scale-95'
+              onClick={handleLogout}
+            >
+              Sair
+              <ArrowLeftOnRectangleIcon
+                className='w-6 h-6 ml-2'
+              />
+            </button>
+          </div>
+        </section>
+      </header>
+      <section className='flex justify-between items-center px-6 h-fit w-screen'>
+        <div className='relative'>
+          <DarkTemplate
+            username={user.user_metadata?.preferred_username}
+            repositoriesNames={darkTemplateNames}
+            className='w-[480px] h-[600px]'
+          />
           <button
-            className='flex justify-between w-fit bg-primary-100 text-primary-300 font-bold py-2 px-6 rounded transition hover:bg-primary-200 hover:text-primary-100 hover:scale-95'
-            onClick={handleLogout}
+            className='absolute bottom-0 right-0 mr-4 mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
+            onClick={() => handleDownloadSvg('dark-template')}
           >
-            Sair
-            <ArrowLeftOnRectangleIcon
-              className='w-6 h-6 ml-2'
+            <ArrowDownTrayIcon
+              className='w-6 h-6'
             />
           </button>
+          {/* <button
+            className='absolute bottom-0 right-0 mr-[4.5rem] mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
+            onClick={() => handleDownloadSvg('dark-template')}
+          >
+            <ShareIcon
+              className='w-6 h-6 pr-1'
+            />
+          </button> */}
         </div>
       </section>
-    </header>
+    </>
   )
 }
