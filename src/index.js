@@ -12,7 +12,7 @@ root.render(
       <h2 className='text-lg font-bold text-start text-gray-800'>
         Made with 💜 by
         <span className='ml-2 text-primary-400 underline'>
-          <a href='https://igorcbraz.me'>
+          <a href='https://igorcbraz.me' target='_blank' rel='noreferrer'>
             Igorcbraz
           </a>
         </span>

@@ -258,7 +258,7 @@ export const Home = () => {
       <header className='bg-white'>
         <section className='flex justify-between items-center flex-wrap-reverse gap-5 p-6 h-fit w-screen'>
           <span>
-            <h1 className='text-3xl font-bold text-start text-gray-800'>Bem-vindo(a) <span className='text-primary-400'>{user.user_metadata?.preferred_username}</span></h1>
+            <h1 className='text-3xl font-bold text-start text-gray-800'>Welcome <span className='text-primary-400'>{user.user_metadata?.preferred_username}</span> 👋</h1>
             <p className='text-lg text-start text-gray-600 mt-2'>{info.bio}</p>
           </span>
           <div className='flex justify-end items-center h-10'>
@@ -337,6 +337,7 @@ export const Home = () => {
               <button
                 className={`group/dark flex justify-between w-fit h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50' : 'bg-primary-100 text-primary-300'} font-bold p-4 rounded transition duration-150 hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, theme: 'light' })}
+                disabled
               >
                 Light
                 <SunIcon
