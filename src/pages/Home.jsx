@@ -240,12 +240,12 @@ export const Home = () => {
   return (
     <>
       <header className='bg-white'>
-        <section className='flex justify-between items-center  p-6 h-fit w-screen'>
-          <div className='w-full'>
+        <section className='flex justify-between items-center flex-wrap-reverse gap-5 p-6 h-fit w-screen'>
+          <span>
             <h1 className='text-3xl font-bold text-start text-gray-800'>Bem-vindo(a) <span className='text-primary-400'>{user.user_metadata?.preferred_username}</span></h1>
             <p className='text-lg text-start text-gray-600 mt-2'>{info.bio}</p>
-          </div>
-          <div className='flex justify-end items-center w-full h-10'>
+          </span>
+          <div className='flex justify-end items-center h-10'>
             <button
               className='flex justify-between w-fit bg-primary-100 text-primary-300 font-bold py-2 px-6 rounded transition hover:bg-primary-200 hover:text-primary-100 hover:scale-95'
               onClick={handleLogout}
@@ -258,7 +258,7 @@ export const Home = () => {
           </div>
         </section>
       </header>
-      <section className='flex justify-between items-center px-6 h-fit w-screen'>
+      <section className='flex justify-between items-center px-6 h-fit w-screen mb-10'>
         <animated.div
           className='relative inline-block'
           onMouseMove={({clientX: x, clientY: y}) => (set({xys: calc(x, y)}))}
@@ -270,7 +270,7 @@ export const Home = () => {
           <DarkTemplate
             username={user.user_metadata?.preferred_username}
             repositoriesNames={darkTemplateNames}
-            className='w-[460px] h-[570px] border-4 border-primary-300 rounded-lg shadow-lg shadow-gray-800'
+            className='w-full h-full border-4 border-primary-300 rounded-lg shadow-lg shadow-gray-800'
           />
           <button
             className='absolute bottom-0 right-0 mr-4 mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'

@@ -18,7 +18,7 @@ export const Desktop = () => {
           <a href='#' className='w-[15%] drop-shadow-lg'>
             <img
               src={Logo}
-              alt='Logo templo enkoji'
+              alt='Logo gitfest'
               className='w-full'
             />
           </a>
@@ -33,7 +33,7 @@ export const Desktop = () => {
               borderClassName='group-hover/buyCoffee:fill-primary-100 fill-primary-600 transition'
               coffeeClassName='group-hover/buyCoffee:fill-primary-50 fill-primary-200 transition'
             />
-            Buy my a Coffee
+            Buy me a Coffee
           </a>
           <hr className='flex self-end w-full bg-gradient-to-t from-primary-900 to-secondary-200 h-[1.2px] border-0 absolute'/>
         </div>

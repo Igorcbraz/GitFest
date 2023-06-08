@@ -1,26 +1,31 @@
 import { useState } from 'react'
 
-import Logo from '../../../assets/images/TextColorLogo.png'
+import Logo from '../../../assets/images/TextLogo.png';
+import { BuyMeACoffee } from '../../BuyMeACoffee';
 
 export const Mobile = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState('')
+  // const [selectedItem, setSelectedItem] = useState('')
 
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
 
-  const handleActivationNavItem = (id, item) => {
-    window.location.href = item
-    setSelectedItem(id)
-    handleToggle()
-  }
+  // const handleActivationNavItem = (id, item) => {
+  //   window.location.href = item
+  //   setSelectedItem(id)
+  //   handleToggle()
+  // }
 
   return (
-    <nav className='bg-gradient-to-r from-primary-500 z-50 to-primary-800 px-2 py-2.5 fixed w-screen top-0 left-0'>
+    <nav className='bg-gradient-to-r from-primary-500 z-50 to-primary-800 px-5 py-2.5 fixed w-screen top-0 left-0'>
       <div className='container flex flex-wrap items-center justify-between'>
-        <a href='#' className='flex items-center'>
-          <img src={Logo} className='h-14' alt='Enkoji Logo' />
+        <a href='#' className='w-32 drop-shadow-lg'>
+          <img
+            src={Logo}
+            alt='Logo GitFest'
+            className='w-full'
+          />
         </a>
         <button
           onClick={handleToggle}
@@ -30,57 +35,22 @@ export const Mobile = () => {
           <span className='sr-only'>Open main menu</span>
           <svg className='w-6 h-6' aria-hidden='true' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'><path fillRule='evenodd' d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z' clipRule='evenodd'></path></svg>
         </button>
-        <div className={`w-full mt-2 ${isOpen ? '' : 'hidden'}`}>
-          <ul className='flex flex-col p-4 mt-4g gap-2 border border-primary-300 rounded-lg bg-gradient-to-r from-primary-500 to-primary-800 '>
-            <li>
-              <button
-                onClick={() => handleActivationNavItem(1, '#history')}
-                className={`block py-2 pl-3 pr-4 w-full text-start text-white rounded ${selectedItem === 1 ? 'bg-primary-400' : ''}`}
-              >
-                Sobre nós
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => handleActivationNavItem(2, '#buddhism')}
-                className={`block py-2 pl-3 pr-4 w-full text-start text-white rounded ${selectedItem === 2 ? 'bg-primary-400' : ''}`}
-              >
-                Budismo
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => handleActivationNavItem(3, '#infos')}
-                className={`block py-2 pl-3 pr-4 w-full text-start text-white rounded ${selectedItem === 3 ? 'bg-primary-400' : ''}`}
-              >
-                Programação
-              </button>
-            </li>
+        <div className={`w-full transition-all ease-in-out duration-1000 overflow-hidden ${isOpen ? 'max-h-80' : 'max-h-0'}`}>
+          <ul className='flex mt-5 flex-col p-4 border border-primary-300 rounded-lg bg-gradient-to-r from-primary-500 to-primary-800'>
             <li>
               <a
-                href='#'
+                href='https://www.buymeacoffee.com/igorcbraz'
                 target='_blank'
                 rel='noreferrer'
-                className='block py-2 pl-3 pr-4 text-white rounded hover:bg-primary-800'
+                className='group/buyCoffee flex justify-center items-center font-medium shadow-lg w-full h-10 text-white duration-300 transition-all border-2 border-primary-300 py-2 rounded-md bg-primary-300 hover:shadow-primary-100 hover:border-primary-100 hover:scale-110'
               >
-                Contribuição
+                <BuyMeACoffee
+                  containerClassName='w-10 h-12'
+                  borderClassName='group-hover/buyCoffee:fill-primary-100 fill-primary-600 transition'
+                  coffeeClassName='group-hover/buyCoffee:fill-primary-50 fill-primary-200 transition'
+                />
+                Buy me a Coffee
               </a>
-            </li>
-            <li>
-              <button
-                onClick={() => handleActivationNavItem(4, '#gallery')}
-                className={`block py-2 pl-3 pr-4 w-full text-start text-white rounded ${selectedItem === 4 ? 'bg-primary-400' : ''}`}
-              >
-                Mídia
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => handleActivationNavItem(5, '#infos')}
-                className={`block py-2 pl-3 pr-4 w-full text-start text-white rounded ${selectedItem === 5 ? 'bg-primary-400' : ''}`}
-              >
-                Visite
-              </button>
             </li>
           </ul>
         </div>
