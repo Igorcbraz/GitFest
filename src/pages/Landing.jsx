@@ -19,7 +19,7 @@ export const Landing = () => {
     })
 
     if (error) {
-      console.log(error)
+      console.eror(error)
       return
     }
 

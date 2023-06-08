@@ -1,59 +1,68 @@
-.cls-1 {
+.t1-background-dark {
   fill: url(#linear-gradient);
 }
 
-.cls-2 {
+.t1-background-light {
+  fill: url(#linear-gradient-neutral);
+}
+
+.t1-border-dark {
   fill: #2f2f2f;
 }
-
-.cls-11, .cls-12, .cls-13, .cls-2, .cls-4, .cls-8, .cls-9 {
-  fill-rule: evenodd;
+.t1-border-light {
+  fill: url(#linear-gradient);
 }
 
-.cls-3 {
+.t1-lines-container {
   opacity: 0.2;
 }
 
-.cls-4 {
+.t1-lines-dark {
   fill: none;
   stroke: #2f2f2f;
   stroke-width: 1px;
 }
 
-.cls-5 {
-  font-size: 118.249px;
+.t1-lines-light {
+  fill: none;
+  stroke: #ffffff34;
+  stroke-width: 1px;
 }
 
-.cls-13, .cls-5, .cls-6, .cls-7 {
-  fill: #fff;
-}
-
-.cls-5, .cls-6 {
+.t1-username, .t1-festival{
   font-family: ø, Lolapeluza;
 }
 
-.cls-6 {
+.t1-username {
+  font-size: 118.249px;
+}
+
+.t1-festival {
   font-size: 123.943px;
 }
 
-.cls-8 {
+.t1-square-sexta {
   fill: #653371;
 }
 
-.cls-10, .cls-9 {
-  fill: #fdf9ff;
-}
-
-.cls-10 {
+.t1-repository-names {
   font-size: 63.488px;
   text-anchor: middle;
   font-family: "Bebas Kai";
 }
 
-.cls-11 {
+.t1-square-sabado {
   fill: #b074ad;
 }
 
-.cls-12 {
+.t1-square-domingo{
   fill: #dd9f87;
+}
+
+.t1-square-sabado, .t1-square-domingo, .t1-github, .t1-border-dark, .t1-border-light, .t1-lines-dark, .t1-lines-light, .t1-square-sexta, .t1-support-text {
+  fill-rule: evenodd;
+}
+
+.t1-support-text, .t1-github, .t1-repository-names, .t1-username, .t1-festival, .t1-festival-line {
+  fill: #fdf9ff;
 }

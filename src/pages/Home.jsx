@@ -2,12 +2,26 @@ import React, { useContext, useEffect, useState } from 'react'
 import { animated, useSpring, config } from '@react-spring/web'
 import {
   ArrowLeftOnRectangleIcon,
-  ArrowDownTrayIcon
+  ArrowDownTrayIcon,
+  MoonIcon,
+  SunIcon,
+  ArrowPathIcon,
+  ArrowDownIcon
   // ShareIcon
 } from '@heroicons/react/24/solid'
 
+import {
+  StarIcon,
+  ClockIcon,
+  PencilSquareIcon,
+  DocumentTextIcon,
+  UserGroupIcon,
+  UserIcon
+} from '@heroicons/react/24/outline'
+
 import { AuthContext } from '../App'
 import { supabase } from '../service/client'
+import { styles } from '../utils/svgStyles'
 
 import { DarkTemplate } from '../components/Templates/Dark/index.jsx'
 
@@ -19,9 +33,22 @@ export const Home = () => {
   const { dispatch } = useContext(AuthContext)
   const [user, setUser] = useState({})
   const [info, setInfo] = useState({})
+  // eslint-disable-next-line no-unused-vars
   const [repositories, setRepositories] = useState([])
-  const [darkTemplateNames, setDarkTemplateNames] = useState([])
+  const [filterRepositories, setFilterRepositories] = useState([])
+  const [filters, setFilters] = useState({
+    theme: 'dark',
+    invertColors: false,
+    sort: 'stars',
+    order: 'asc',
+    type: ['owner']
+  })
 
+  useEffect(() => {
+    if (info?.repos_url) {
+      handleApplyFilters()
+    }
+  }, [filters.sort, filters.order, filters.type])
 
   useEffect(() => {
     getSession()
@@ -57,7 +84,7 @@ export const Home = () => {
       console.error(error)
       return
     }
-    console.log(data.user)
+
     setUser(data.user)
   }
 
@@ -86,24 +113,10 @@ export const Home = () => {
       return b.stargazers_count - a.stargazers_count
     })
 
-    const formatedData = orderedDataByStars.map(item => {
-      return {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        homepage: item.homepage,
-        is_template: item.is_template,
-        language: item.language,
-        stargazers_count: item.stargazers_count,
-        topics: item.topics,
-        created_at: item.created_at,
-        updated_at: item.updated_at
-      }
-    })
+    const formattedData = formatRepositories(orderedDataByStars)
 
-    setRepositories(formatedData)
-    setDarkTemplateNames(formatedData.map(item => item.name))
-    console.log(repositories)
+    setRepositories(formattedData)
+    setFilterRepositories(formattedData.map(item => item.name))
   }
 
   const handleLogout = async () => {
@@ -132,67 +145,7 @@ export const Home = () => {
     canvas.height = svg.clientHeight
 
     const styleTag = svg.querySelector('style')
-    const cssStyles = `
-      .cls-1 {
-        fill: url(#linear-gradient);
-      }
-
-      .cls-2 {
-        fill: #2f2f2f;
-      }
-
-      .cls-11, .cls-12, .cls-13, .cls-2, .cls-4, .cls-8, .cls-9 {
-        fill-rule: evenodd;
-      }
-
-      .cls-3 {
-        opacity: 0.2;
-      }
-
-      .cls-4 {
-        fill: none;
-        stroke: #2f2f2f;
-        stroke-width: 1px;
-      }
-
-      .cls-5 {
-        font-size: 118.249px;
-      }
-
-      .cls-13, .cls-5, .cls-6, .cls-7 {
-        fill: #fff;
-      }
-
-      .cls-5, .cls-6 {
-        font-family: ø, Lolapeluza;
-      }
-
-      .cls-6 {
-        font-size: 123.943px;
-      }
-
-      .cls-8 {
-        fill: #653371;
-      }
-
-      .cls-10, .cls-9 {
-        fill: #fdf9ff;
-      }
-
-      .cls-10 {
-        font-size: 63.488px;
-        font-family: "Bebas Kai";
-      }
-
-      .cls-11 {
-        fill: #b074ad;
-      }
-
-      .cls-12 {
-        fill: #dd9f87;
-      }
-    `
-    styleTag.textContent = cssStyles
+    styleTag.textContent = styles.template1
 
     const serializer = new XMLSerializer()
     let source = serializer.serializeToString(svg)
@@ -219,6 +172,69 @@ export const Home = () => {
       a.href = canvas.toDataURL()
       a.click()
     }
+  }
+
+  const handleFilterType = (type) => {
+    if (filters.type.includes(type)) {
+      const newType = filters.type.filter(item => item !== type)
+
+      if (newType.length === 0) {
+        return setFilters({ ...filters, type: ['owner'] })
+      }
+
+      setFilters({ ...filters, type: newType })
+    } else {
+      setFilters({ ...filters, type: [...filters.type, type] })
+    }
+  }
+
+  const handleApplyFilters = async () => {
+    const { type, order, sort } = filters
+    const url = new URL(info.repos_url)
+    url.searchParams.append('direction', order)
+
+    if (sort !== 'stars') {
+      url.searchParams.append('sort', sort)
+    }
+
+    if (type.length === 1) {
+      url.searchParams.append('type', type[0])
+    } else {
+      url.searchParams.append('type', 'all')
+    }
+
+    const response = await fetch(url)
+    let data = await response.json()
+
+
+    if (sort === 'stars') {
+      data = data.sort((a, b) => {
+        return b.stargazers_count - a.stargazers_count
+      })
+    }
+
+    const formattedRepositories = formatRepositories(data)
+
+    setFilterRepositories(formattedRepositories.map(item => item.name))
+  }
+
+  const formatRepositories = (repositories) => {
+    const formatedData = repositories.map(item => {
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        homepage: item.homepage,
+        is_template: item.is_template,
+        language: item.language,
+        stargazers_count: item.stargazers_count,
+        topics: item.topics,
+        created_at: item.created_at,
+        updated_at: item.updated_at
+      }
+    })
+
+    return formatedData
   }
 
   if (!user) {
@@ -258,37 +274,160 @@ export const Home = () => {
           </div>
         </section>
       </header>
-      <section className='flex justify-between items-center px-6 h-fit w-screen mb-10'>
-        <animated.div
-          className='relative inline-block'
-          onMouseMove={({clientX: x, clientY: y}) => (set({xys: calc(x, y)}))}
-          onMouseLeave={() => set({xys:[0,0,1]})}
-          style={{
-            transform: props.xys.interpolate(trans)
-          }}
-        >
-          <DarkTemplate
-            username={user.user_metadata?.preferred_username}
-            repositoriesNames={darkTemplateNames}
-            className='w-full h-full border-4 border-primary-300 rounded-lg shadow-lg shadow-gray-800'
-          />
-          <button
-            className='absolute bottom-0 right-0 mr-4 mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
-            onClick={() => handleDownloadSvg('dark-template')}
+      <hr className='border-gray-50 border-solid border-t-2 mb-5'/>
+      <section className='grid grid-cols-1 px-6 w-screen min-h-[90vh] mb-6 md:grid-cols-2'>
+        <div className='flex justify-center mb-5 md:mb-0'>
+          <animated.div
+            className='relative inline-block w-fit h-fit md:w-[33vw]'
+            onMouseMove={({clientX: x, clientY: y}) => (set({xys: calc(x, y)}))}
+            onMouseLeave={() => set({xys:[0,0,1]})}
+            style={{
+              transform: props.xys.interpolate(trans)
+            }}
           >
-            <ArrowDownTrayIcon
-              className='w-6 h-6'
+            <DarkTemplate
+              username={user.user_metadata?.preferred_username}
+              data={filterRepositories}
+              invertColors={filters.invertColors}
+              className='w-full h-full border-4 border-primary-300 rounded-lg shadow-lg shadow-gray-800'
             />
-          </button>
-          {/* <button
-            className='absolute bottom-0 right-0 mr-[4.5rem] mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
-            onClick={() => handleDownloadSvg('dark-template')}
-          >
-            <ShareIcon
-              className='w-6 h-6 pr-1'
-            />
-          </button> */}
-        </animated.div>
+            <button
+              className='absolute bottom-0 right-0 mr-4 mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
+              onClick={() => handleDownloadSvg('dark-template')}
+            >
+              <ArrowDownTrayIcon
+                className='w-6 h-6'
+              />
+            </button>
+            {/* <button
+              className='absolute bottom-0 right-0 mr-[4.5rem] mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
+              onClick={() => handleDownloadSvg('dark-template')}
+            >
+              <ShareIcon
+                className='w-6 h-6 pr-1'
+              />
+            </button> */}
+          </animated.div>
+        </div>
+        <div className='flex justify-between items-start flex-col gap-10 mt-4 md:justify-evenly md:gap-0 md:mt-0'>
+          <div className='flex justify-start items-start flex-col w-fit h-fit'>
+            <h2 className='text-2xl font-bold text-start text-gray-800'>Theme</h2>
+            <p className='text-lg text-start text-gray-600 mt-2'>
+              Theme the template should be
+            </p>
+            <div className='flex justify-start items-center gap-5 mt-5'>
+              <button
+                className={`group/invert flex justify-between w-fit h-14 ${filters.invertColors ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, invertColors: !filters.invertColors })}
+              >
+                Invert Colors
+                <ArrowPathIcon
+                  className={`w-6 h-6 ml-2 duration-500 transition-transform ${filters.invertColors ? '-rotate-180' : 'rotate-0'} transform group-hover/invert:-rotate-180`}
+                />
+              </button>
+              <button
+                className={`group/dark flex justify-between w-fit h-14 ${filters.theme === 'dark' ? 'bg-primary-200 text-primary-50' : 'bg-primary-100 text-primary-300'} font-bold p-4 rounded transition duration-150 hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, theme: 'dark' })}
+              >
+                Dark
+                <MoonIcon
+                  className='w-6 h-6 ml-2 group-hover/dark:animate-pulse duration-150'
+                />
+              </button>
+              <button
+                className={`group/dark flex justify-between w-fit h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50' : 'bg-primary-100 text-primary-300'} font-bold p-4 rounded transition duration-150 hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, theme: 'light' })}
+              >
+                Light
+                <SunIcon
+                  className='w-6 h-6 ml-2 group-hover/light:animate-pulse duration-150'
+                />
+              </button>
+            </div>
+          </div>
+          <div className='flex justify-start items-start flex-col w-fit h-fit'>
+            <div className='flex flex-row justify-between items-center w-full'>
+              <span>
+                <h2 className='text-2xl font-bold text-start text-gray-800'>Sort</h2>
+                <p className='text-lg text-start text-gray-600 mt-2'>
+                  The property to sort the results by.
+                </p>
+              </span>
+              <button
+                className='text-primary-300 mr-5'
+                onClick={() => setFilters({ ...filters, order: filters.order === 'asc' ? 'desc': 'asc' })}
+              >
+                <ArrowDownIcon
+                  className={`w-6 h-6 ml-2 duration-500 transition-transform ${filters.order === 'asc' ? 'rotate-0' : 'rotate-180'}`}
+                />
+              </button>
+            </div>
+            <div className='flex justify-start items-center gap-5 mt-5'>
+              <button
+                className={`group/stars flex justify-between w-fit h-14 ${filters.sort === 'stars' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, sort: 'stars' })}
+              >
+                Stars
+                <StarIcon
+                  className='w-6 h-6 ml-2 duration-500 transition-transform'
+                />
+              </button>
+              <button
+                className={`group/created flex justify-between w-fit h-14 ${filters.sort === 'created' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, sort: 'created' })}
+              >
+                Created
+                <ClockIcon
+                  className='w-6 h-6 ml-2 duration-500 transition-transform'
+                />
+              </button>
+              <button
+                className={`group/updated flex justify-between w-fit h-14 ${filters.sort === 'updated' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, sort: 'updated' })}
+              >
+                Updated
+                <PencilSquareIcon
+                  className='w-6 h-6 ml-2 duration-500 transition-transform'
+                />
+              </button>
+              <button
+                className={`group/full_name flex justify-between w-fit h-14 ${filters.sort === 'full_name' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, sort: 'full_name' })}
+              >
+                Name
+                <DocumentTextIcon
+                  className='w-6 h-6 ml-2 duration-500 transition-transform'
+                />
+              </button>
+            </div>
+          </div>
+          <div className='flex justify-start items-start flex-col w-fit h-fit'>
+            <h2 className='text-2xl font-bold text-start text-gray-800'>Type</h2>
+            <p className='text-lg text-start text-gray-600 mt-2'>
+              Limit results to repositories of the specified type.
+            </p>
+            <div className='flex justify-start items-center gap-5 mt-5'>
+              <button
+                className={`group/owner flex justify-between w-fit h-14 ${filters.type.includes('owner') ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => handleFilterType('owner')}
+              >
+                Owner
+                <UserIcon
+                  className='w-6 h-6 ml-2 group-hover/owner:animate-pulse duration-150'
+                />
+              </button>
+              <button
+                className={`group/member flex justify-between w-fit h-14 ${filters.type.includes('member') ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => handleFilterType('member')}
+              >
+                Member
+                <UserGroupIcon
+                  className='w-6 h-6 ml-2 group-hover/member:animate-pulse duration-150'
+                />
+              </button>
+            </div>
+          </div>
+        </div>
       </section>
     </>
   )
