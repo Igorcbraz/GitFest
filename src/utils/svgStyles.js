@@ -1,6 +1,15 @@
 // Copy of styles to use when download svg
 export const styles = {
   template1: `
+    @font-face {
+      font-family: 'Bebas Kai';
+      src: url('../fonts/BebasKai.otf');
+    }
+    @font-face {
+      font-family: 'Lolapeluza';
+      src: url('../fonts/Lolapeluza.ttf');
+    }
+
     .t1-background-dark {
       fill: url(#linear-gradient);
     }
