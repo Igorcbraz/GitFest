@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { animated, config, useSpring } from '@react-spring/web'
 
 import { Navbar } from '../components/Navbar'
 import { Github } from '../components/Github'
@@ -7,7 +8,11 @@ import { supabase } from '../service/client'
 
 import Preview from '../assets/images/dark-template.png'
 
+const calc = (x, y) => [-(y - window.innerHeight / 2) / 40, (x - window.innerWidth) / 35, 1]
+const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
+
 export const Landing = () => {
+  const [props, set] = useSpring(() => ({ xys: [0, 0, 1] , config: config.default}))
   const { dispatch } = useContext(AuthContext)
 
   const signInWithGithub = async () => {
@@ -58,10 +63,15 @@ export const Landing = () => {
               </span>
             </span>
           </div>
-          <img
+          <animated.img
             src={Preview}
+            onMouseMove={({clientX: x, clientY: y}) => (set({xys: calc(x, y)}))}
+            onMouseLeave={() => set({xys:[0,0,1]})}
             alt='Preview do resultado final'
             className='w-full md:w-5/12 border-4 border-primary-300 rounded-lg shadow-lg shadow-gray-800'
+            style={{
+              transform: props.xys.interpolate(trans)
+            }}
           />
         </div>
       </section>
