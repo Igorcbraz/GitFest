@@ -3,6 +3,7 @@ import './styles.css'
 
 export function DarkTemplate({ username, data, className, invertColors }) {
   const [repositoriesNames, setRepositoriesNames] = useState(data)
+  const [titleFontSize, setTitleFontSize] = useState('10rem')
 
   useEffect(() => {
     const elements = document.querySelectorAll('[class^="t1"][class*="light"], [class^="t1"][class*="dark"]');
@@ -39,11 +40,18 @@ export function DarkTemplate({ username, data, className, invertColors }) {
             newState[i + 1] = item2.substring(0, remainingLength)
             return newState
           })
-          console.log(data)
         }
       }
     }
   }, [data])
+
+  useEffect(() => {
+    if (username) {
+      const size = (8 - (username.length / 10)).toFixed(2)
+      const fontSize =`${size}rem`
+      setTitleFontSize(fontSize)
+    }
+  }, [username])
 
   if (repositoriesNames.length <= 0) {
     return (
@@ -164,7 +172,9 @@ export function DarkTemplate({ username, data, className, invertColors }) {
         <path id='Forma_86' data-name='Forma 86' className='t1-lines-dark' d='M499,16s-68.952,14.934-80,8S403.129,10.39,408,5'/>
         <path id='Forma_85' data-name='Forma 85' className='t1-lines-dark' d='M499,31s-79.087,15.49-98,3S375.311,17.722,381,7'/>
       </g>
-      <text id='username' className='t1-username' transform='translate(129.921 81.942) scale(0.5)'>{username}</text>
+      <text transform='scale(0.5)' dominantBaseline='middle' textAnchor='middle' x='500' y='135' width='100%'>
+        <tspan fontSize={titleFontSize} className='t1-username'>{username}</tspan>
+      </text>
       <text id='FESTIVAL' className='t1-festival' transform='translate(187.075 111.161) scale(0.269)'>FESTIVAL</text>
       <rect id='direita' className='t1-festival-line' x='323' y='101' width='28' height='2'/>
       <rect id='esquerda' className='t1-festival-line' x='155' y='100' width='28' height='2'/>

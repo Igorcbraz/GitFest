@@ -6,7 +6,8 @@ import {
   MoonIcon,
   SunIcon,
   ArrowPathIcon,
-  ArrowDownIcon
+  ArrowDownIcon,
+  ArrowUturnLeftIcon
   // ShareIcon
 } from '@heroicons/react/24/solid'
 
@@ -16,7 +17,7 @@ import {
   PencilSquareIcon,
   DocumentTextIcon,
   UserGroupIcon,
-  UserIcon
+  UserIcon,
 } from '@heroicons/react/24/outline'
 
 import { AuthContext } from '../App'
@@ -237,6 +238,16 @@ export const Home = () => {
     return formatedData
   }
 
+  const clearFilters = () => {
+    setFilters({
+      theme: 'dark',
+      invertColors: false,
+      sort: 'stars',
+      order: 'asc',
+      type: ['owner']
+    })
+  }
+
   if (!user) {
     return (
       <div className='flex justify-center items-center h-screen w-screen'>
@@ -310,23 +321,14 @@ export const Home = () => {
           </animated.div>
         </div>
         <div className='flex justify-between items-start flex-col gap-10 mt-4 md:justify-evenly md:gap-0 md:mt-0'>
-          <div className='flex justify-start items-start flex-col w-fit h-fit'>
+          <div className='flex justify-start items-start flex-col w-screen pr-4 h-fit md:w-fit'>
             <h2 className='text-2xl font-bold text-start text-gray-800'>Theme</h2>
             <p className='text-lg text-start text-gray-600 mt-2'>
               Theme the template should be
             </p>
-            <div className='flex justify-start items-center gap-5 mt-5'>
+            <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
               <button
-                className={`group/invert flex justify-between w-fit h-14 ${filters.invertColors ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-                onClick={() => setFilters({ ...filters, invertColors: !filters.invertColors })}
-              >
-                Invert Colors
-                <ArrowPathIcon
-                  className={`w-6 h-6 ml-2 duration-500 transition-transform ${filters.invertColors ? '-rotate-180' : 'rotate-0'} transform group-hover/invert:-rotate-180`}
-                />
-              </button>
-              <button
-                className={`group/dark flex justify-between w-fit h-14 ${filters.theme === 'dark' ? 'bg-primary-200 text-primary-50' : 'bg-primary-100 text-primary-300'} font-bold p-4 rounded transition duration-150 hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/dark flex justify-between items-center w-28 md:w-fit h-20 md:h-14 ${filters.theme === 'dark' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, theme: 'dark' })}
               >
                 Dark
@@ -335,21 +337,32 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/dark flex justify-between w-fit h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50' : 'bg-primary-100 text-primary-300'} font-bold p-4 rounded transition duration-150 hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/light flex justify-between items-center w-40 md:w-fit h-20 md:h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, theme: 'light' })}
                 disabled
               >
-                Light
+                Light (Em Breve)
                 <SunIcon
                   className='w-6 h-6 ml-2 group-hover/light:animate-pulse duration-150'
                 />
               </button>
+              <button
+                className={`group/invert flex justify-between items-center row-span-2 w-48 md:w-fit h-20 md:h-14 ${filters.invertColors ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                onClick={() => setFilters({ ...filters, invertColors: !filters.invertColors })}
+              >
+                Invert Colors
+                <ArrowPathIcon
+                  className={`w-6 h-6 ml-2 duration-500 transition-transform ${filters.invertColors ? '-rotate-180' : 'rotate-0'} transform group-hover/invert:-rotate-180`}
+                />
+              </button>
             </div>
           </div>
-          <div className='flex justify-start items-start flex-col w-fit h-fit'>
-            <div className='flex flex-row justify-between items-center w-full'>
+          <div className='flex justify-start items-start flex-col w-screen pr-4 h-fit md:w-fit'>
+            <div className='flex flex-row justify-between items-center flex-wrap w-full'>
               <span>
-                <h2 className='text-2xl font-bold text-start text-gray-800'>Sort</h2>
+                <h2 className='text-2xl font-bold text-start text-gray-800'>
+                  Sort ({filters.order === 'asc' ? 'Ascending' : 'Descending'})
+                </h2>
                 <p className='text-lg text-start text-gray-600 mt-2'>
                   The property to sort the results by.
                 </p>
@@ -363,9 +376,9 @@ export const Home = () => {
                 />
               </button>
             </div>
-            <div className='flex justify-start items-center gap-5 mt-5'>
+            <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
               <button
-                className={`group/stars flex justify-between w-fit h-14 ${filters.sort === 'stars' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/stars flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'stars' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'stars' })}
               >
                 Stars
@@ -374,7 +387,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/created flex justify-between w-fit h-14 ${filters.sort === 'created' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/created flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'created' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'created' })}
               >
                 Created
@@ -383,7 +396,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/updated flex justify-between w-fit h-14 ${filters.sort === 'updated' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/updated flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'updated' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'updated' })}
               >
                 Updated
@@ -392,7 +405,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/full_name flex justify-between w-fit h-14 ${filters.sort === 'full_name' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/full_name flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'full_name' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'full_name' })}
               >
                 Name
@@ -402,12 +415,14 @@ export const Home = () => {
               </button>
             </div>
           </div>
-          <div className='flex justify-start items-start flex-col w-fit h-fit'>
-            <h2 className='text-2xl font-bold text-start text-gray-800'>Type</h2>
-            <p className='text-lg text-start text-gray-600 mt-2'>
-              Limit results to repositories of the specified type.
-            </p>
-            <div className='flex justify-start items-center gap-5 mt-5'>
+          <div className='flex justify-start items-start flex-col w-screen h-fit md:w-fit'>
+            <span className='w-[90%] md:w-full'>
+              <h2 className='text-2xl font-bold text-start text-gray-800'>Type</h2>
+              <p className='text-lg text-start text-gray-600 mt-2'>
+                Limit results to repositories of the specified type.
+              </p>
+            </span>
+            <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
               <button
                 className={`group/owner flex justify-between w-fit h-14 ${filters.type.includes('owner') ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => handleFilterType('owner')}
@@ -427,6 +442,26 @@ export const Home = () => {
                 />
               </button>
             </div>
+          </div>
+          <div className='flex justify-end items-center gap-2 w-[90%] h-fit'>
+            <button
+              className='flex justify-between w-fit bg-transparent text-primary-300 font-medium py-2 px-6 rounded transition hover:bg-primary-50'
+              onClick={clearFilters}
+            >
+              Clear Filters
+              <ArrowUturnLeftIcon
+                className='w-6 h-6 ml-2'
+              />
+            </button>
+            <button
+              className='flex justify-between w-fit bg-primary-400 text-primary-50 font-bold py-2 px-6 rounded transition hover:bg-primary-500 hover:text-primary-100'
+              onClick={() => handleDownloadSvg('dark-template')}
+            >
+              Download
+              <ArrowDownTrayIcon
+                className='w-6 h-6 ml-2'
+              />
+            </button>
           </div>
         </div>
       </section>
