@@ -443,7 +443,7 @@ export const Home = () => {
               </button>
             </div>
           </div>
-          <div className='flex justify-end items-center gap-2 w-[90%] h-fit'>
+          <div className='flex justify-between  items-center gap-2 h-fit w-full md:w-[90%] md:justify-end'>
             <button
               className='flex justify-between w-fit bg-transparent text-primary-300 font-medium py-2 px-6 rounded transition hover:bg-primary-50'
               onClick={clearFilters}
