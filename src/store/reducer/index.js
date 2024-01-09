@@ -1,5 +1,6 @@
 export const initialState = {
-  isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false
+  isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
+  githubUsername: null
 };
 
 export const reducer = (state, action) => {
@@ -14,6 +15,12 @@ export const reducer = (state, action) => {
     localStorage.clear()
     return {
       isLoggedIn: false
+    }
+  }
+  case 'SET_GITHUB_USERNAME': {
+    return {
+      ...state,
+      githubUsername: action.payload.githubUsername
     }
   }
   default:

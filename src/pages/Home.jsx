@@ -8,7 +8,6 @@ import {
   ArrowPathIcon,
   ArrowDownIcon,
   ArrowUturnLeftIcon
-  // ShareIcon
 } from '@heroicons/react/24/solid'
 
 import {
@@ -31,8 +30,8 @@ const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg)
 
 export const Home = () => {
   const [props, set] = useSpring(() => ({ xys: [0, 0, 1] , config: config.default}))
-  const { dispatch } = useContext(AuthContext)
-  const [user, setUser] = useState({})
+  const { dispatch, state } = useContext(AuthContext)
+  const [username, setUsername] = useState('')
   const [info, setInfo] = useState({})
   // eslint-disable-next-line no-unused-vars
   const [repositories, setRepositories] = useState([])
@@ -46,92 +45,121 @@ export const Home = () => {
   })
 
   useEffect(() => {
-    if (info?.repos_url) {
-      handleApplyFilters()
-    }
+    if (!info?.repos_url) return
+
+    handleApplyFilters()
   }, [filters.sort, filters.order, filters.type])
 
   useEffect(() => {
-    getSession()
+    const fetchUsername = async () => {
+      let username = state?.githubUsername
+
+      if (!username) {
+        const token = await getSession()
+        username = await getOAuthUsername(token)
+      }
+
+      setUsername(username)
+    }
+
+    fetchUsername()
   }, [])
 
   useEffect(() => {
-    if (user?.user_metadata) {
-      handleFetchMoreInfo()
-    }
-  }, [user])
+    if (!username) return
+
+    handleFetchMoreInfo()
+  }, [username])
 
   useEffect(() => {
-    if (info?.repos_url) {
-      handleFetchRepositories(info?.repos_url)
-    }
+    if (!info?.repos_url) return
+
+    handleFetchRepositories(info?.repos_url)
   }, [info])
 
   const getSession = async () => {
-    const { data, error } = await supabase.auth.getSession()
+    try {
+      const { data, error } = await supabase.auth.getSession()
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data.session.access_token
+    } catch (error) {
       console.error(error)
-      return
     }
-
-    await getUser(data.session.access_token)
   }
 
-  async function getUser(accessToken) {
-    const { data, error } = await supabase.auth.getUser(accessToken)
+  async function getOAuthUsername(accessToken) {
+    try {
+      const { data, error } = await supabase.auth.getUser(accessToken)
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data.user.user_metadata.preferred_username
+    } catch (error) {
       console.error(error)
-      return
     }
-
-    setUser(data.user)
   }
 
   const handleFetchMoreInfo = async () => {
-    const response = await fetch('https://api.github.com/users/' + user.user_metadata.preferred_username)
-    const data = await response.json()
+    try {
+      const response = await fetch('https://api.github.com/users/' + username)
+      const data = await response.json()
 
-    const moreInfo = {
-      bio: data.bio,
-      blog: data.blog,
-      company: data.company,
-      followers: data.followers,
-      public_repos: data.public_repos,
-      repos_url: data.repos_url,
-      twitter_username: data.twitter_username
+      const moreInfo = {
+        bio: data.bio,
+        blog: data.blog,
+        company: data.company,
+        followers: data.followers,
+        public_repos: data.public_repos,
+        repos_url: data.repos_url,
+        twitter_username: data.twitter_username
+      }
+
+      setInfo(moreInfo)
+    } catch (error) {
+      console.error(error)
     }
-
-    setInfo(moreInfo)
   }
 
   const handleFetchRepositories = async (url) => {
-    const response = await fetch(url)
-    const data = await response.json()
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
 
-    const orderedDataByStars = data.sort((a, b) => {
-      return b.stargazers_count - a.stargazers_count
-    })
+      const orderedDataByStars = data.sort((a, b) => {
+        return b.stargazers_count - a.stargazers_count
+      })
 
-    const formattedData = formatRepositories(orderedDataByStars)
+      const formattedData = formatRepositories(orderedDataByStars)
 
-    setRepositories(formattedData)
-    setFilterRepositories(formattedData.map(item => item.name))
+      setRepositories(formattedData)
+      setFilterRepositories(formattedData.map(item => item.name))
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut()
+    try {
+      const { error } = await supabase.auth.signOut()
 
-    if (error) {
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      dispatch({
+        type: 'LOGOUT'
+      })
+
+      return window.location.href = '/'
+    } catch (error) {
       console.error(error)
-      return
     }
-
-    dispatch({
-      type: 'LOGOUT'
-    })
-    return window.location.href = '/'
   }
 
   const handleDownloadSvg = (templateId) => {
@@ -248,7 +276,7 @@ export const Home = () => {
     })
   }
 
-  if (!user) {
+  if (!username) {
     return (
       <div className='flex justify-center items-center h-screen w-screen'>
         <div className='flex justify-center items-center flex-col'>
@@ -269,7 +297,7 @@ export const Home = () => {
       <header className='bg-white'>
         <section className='flex justify-between items-center flex-wrap-reverse gap-5 p-6 h-fit w-screen'>
           <span>
-            <h1 className='text-3xl font-bold text-start text-gray-800'>Welcome <span className='text-primary-400'>{user.user_metadata?.preferred_username}</span> 👋</h1>
+            <h1 className='text-3xl font-bold text-start text-gray-800'>Welcome <span className='text-primary-400'>{username}</span> 👋</h1>
             <p className='text-lg text-start text-gray-600 mt-2'>{info.bio}</p>
           </span>
           <div className='flex justify-end items-center h-10'>
@@ -297,7 +325,7 @@ export const Home = () => {
             }}
           >
             <DarkTemplate
-              username={user.user_metadata?.preferred_username}
+              username={username}
               data={filterRepositories}
               invertColors={filters.invertColors}
               className='w-full h-full border-4 border-primary-300 rounded-lg shadow-lg shadow-gray-800'
@@ -310,14 +338,6 @@ export const Home = () => {
                 className='w-6 h-6'
               />
             </button>
-            {/* <button
-              className='absolute bottom-0 right-0 mr-[4.5rem] mb-3 bg-white shadow-lg shadow-gray-800 text-primary-300 font-bold p-2 rounded-full transition hover:bg-primary-200 hover:text-primary-100 hover:scale-110'
-              onClick={() => handleDownloadSvg('dark-template')}
-            >
-              <ShareIcon
-                className='w-6 h-6 pr-1'
-              />
-            </button> */}
           </animated.div>
         </div>
         <div className='flex justify-between items-start flex-col gap-10 mt-4 md:justify-evenly md:gap-0 md:mt-0'>
@@ -341,7 +361,7 @@ export const Home = () => {
                 onClick={() => setFilters({ ...filters, theme: 'light' })}
                 disabled
               >
-                Light (Em Breve)
+                Light (Soon)
                 <SunIcon
                   className='w-6 h-6 ml-2 group-hover/light:animate-pulse duration-150'
                 />
