@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { animated, config, useSpring } from '@react-spring/web'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { Navbar } from '../components/Navbar'
 import { Github } from '../components/Github'
@@ -67,6 +68,7 @@ export const Landing = () => {
       }
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { animated, useSpring, config } from '@react-spring/web'
+import { toast } from 'react-toastify'
 import {
   ArrowLeftOnRectangleIcon,
   ArrowDownTrayIcon,
@@ -9,7 +10,6 @@ import {
   ArrowDownIcon,
   ArrowUturnLeftIcon
 } from '@heroicons/react/24/solid'
-
 import {
   StarIcon,
   ClockIcon,
@@ -88,6 +88,7 @@ export const Home = () => {
       return data.session.access_token
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 
@@ -102,6 +103,7 @@ export const Home = () => {
       return data.user.user_metadata.preferred_username
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 
@@ -123,6 +125,7 @@ export const Home = () => {
       setInfo(moreInfo)
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 
@@ -141,6 +144,7 @@ export const Home = () => {
       setFilterRepositories(formattedData.map(item => item.name))
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 
@@ -159,6 +163,7 @@ export const Home = () => {
       return window.location.href = '/'
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 
