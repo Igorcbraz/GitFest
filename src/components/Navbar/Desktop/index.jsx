@@ -8,7 +8,7 @@ import { BuyMeACoffee } from '../../BuyMeACoffee';
 export const Desktop = () => {
   return (
     <>
-      <nav className='flex justify-center fixed z-50 w-full h-24 pb-6 bg-gradient-to-r from-primary-700 to-primary-200'>
+      <nav className='flex justify-center fixed z-50 w-full h-24 pb-6 bg-gradient-to-r from-primary-700 to-primary-200 dark:from-primary-800 dark:to-primary-400'>
         <div className='flex items-center justify-between gap-2 w-4/5 h-24 relative' id='navbar-default'>
           <span>
             <InformationCircleIcon

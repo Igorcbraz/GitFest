@@ -1,6 +1,7 @@
 /* eslint-disable */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './src/**/*.{js,jsx,ts,tsx}'
   ],
@@ -38,6 +39,12 @@ module.exports = {
       backgroundImage: {
       }
     },
+  },
+  variants: {
+    extend: {
+      opacity: ['disabled'],
+      cursor: ['disabled'],
+    }
   },
   plugins: [
   ]
