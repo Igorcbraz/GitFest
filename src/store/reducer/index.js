@@ -1,27 +1,55 @@
-export const initialState = {
-  isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
-  githubUsername: null
-};
+const themePreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+export const initialState = JSON.parse(localStorage.getItem('user')) || {
+  isLoggedIn: false,
+  githubUsername: null,
+  theme: themePreference
+}
 
 export const reducer = (state, action) => {
   switch (action.type) {
   case 'LOGIN': {
-    localStorage.setItem('isLoggedIn', JSON.stringify(action.payload.isLoggedIn))
-    return {
-      isLoggedIn: action.payload.isLoggedIn
+    const user = {
+      ...state,
+      ...action.payload,
+      isLoggedIn: true
     }
+
+    localStorage.setItem('user', JSON.stringify(user))
+    return user
   }
   case 'LOGOUT': {
     localStorage.clear()
+
     return {
-      isLoggedIn: false
+      ...state,
+      isLoggedIn: false,
+      githubUsername: null,
+      theme: themePreference
     }
   }
   case 'SET_GITHUB_USERNAME': {
-    return {
+    const user = {
       ...state,
-      githubUsername: action.payload.githubUsername
+      githubUsername: action.payload
     }
+
+    localStorage.setItem('user', JSON.stringify(user))
+    return user
+  }
+  case 'SET_THEME': {
+    const user = {
+      ...state,
+      theme: action.payload
+    }
+
+    if (user.theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+
+    localStorage.setItem('user', JSON.stringify(user))
+    return user
   }
   default:
     return state;

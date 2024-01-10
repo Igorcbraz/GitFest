@@ -23,7 +23,8 @@ import { AuthContext } from '../App'
 import { supabase } from '../service/client'
 import { styles } from '../utils/svgStyles'
 
-import { DarkTemplate } from '../components/Templates/Dark/index.jsx'
+import { DarkTemplate } from '../components/Templates/Dark'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 const calc = (x, y) => [-(y - window.innerHeight / 2) / 25, (x - window.innerWidth / 5) / 25, 1]
 const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
@@ -56,6 +57,9 @@ export const Home = () => {
 
       if (!username) {
         const token = await getSession()
+
+        if (!token) return console.error('token not found')
+
         username = await getOAuthUsername(token)
       }
 
@@ -76,6 +80,10 @@ export const Home = () => {
 
     handleFetchRepositories(info?.repos_url)
   }, [info])
+
+  useEffect(() => {
+    setFilters({ ...filters, invertColors: state.theme === 'dark' })
+  }, [state.theme])
 
   const getSession = async () => {
     try {
@@ -299,15 +307,16 @@ export const Home = () => {
 
   return (
     <>
-      <header className='bg-white'>
+      <header className='bg-white dark:bg-zinc-900'>
         <section className='flex justify-between items-center flex-wrap-reverse gap-5 p-6 h-fit w-screen'>
           <span>
-            <h1 className='text-3xl font-bold text-start text-gray-800'>Welcome <span className='text-primary-400'>{username}</span> 👋</h1>
-            <p className='text-lg text-start text-gray-600 mt-2'>{info.bio}</p>
+            <h1 className='text-3xl font-bold text-start text-gray-800 dark:text-gray-200'>Welcome <span className='text-primary-400'>{username}</span> 👋</h1>
+            <p className='text-lg text-start text-gray-600 mt-2 dark:text-gray-400'>{info.bio}</p>
           </span>
-          <div className='flex justify-end items-center h-10'>
+          <div className='flex justify-end items-center h-10 gap-5'>
+            <ThemeToggle />
             <button
-              className='flex justify-between w-fit bg-primary-100 text-primary-300 font-bold py-2 px-6 rounded transition hover:bg-primary-200 hover:text-primary-100 hover:scale-95'
+              className='flex justify-between items-center w-fit h-10 bg-primary-100 text-primary-300 font-bold py-2 px-6 rounded transition hover:bg-primary-200 hover:text-primary-100 hover:scale-95'
               onClick={handleLogout}
             >
               Sair
@@ -318,8 +327,8 @@ export const Home = () => {
           </div>
         </section>
       </header>
-      <hr className='border-gray-50 border-solid border-t-2 mb-5'/>
-      <section className='grid grid-cols-1 px-6 w-screen min-h-[90vh] mb-6 md:grid-cols-2'>
+      <hr className='border-gray-50 border-solid border-t-2 dark:border-zinc-800'/>
+      <section className='bg-white grid grid-cols-1 px-6 py-10 w-screen min-h-[90vh] md:grid-cols-2 dark:bg-zinc-900'>
         <div className='flex justify-center mb-5 md:mb-0'>
           <animated.div
             className='relative inline-block w-fit h-fit md:w-[33vw]'
@@ -347,13 +356,13 @@ export const Home = () => {
         </div>
         <div className='flex justify-between items-start flex-col gap-10 mt-4 md:justify-evenly md:gap-0 md:mt-0'>
           <div className='flex justify-start items-start flex-col w-screen pr-4 h-fit md:w-fit'>
-            <h2 className='text-2xl font-bold text-start text-gray-800'>Theme</h2>
-            <p className='text-lg text-start text-gray-600 mt-2'>
+            <h2 className='text-2xl font-bold text-start text-gray-800 dark:text-gray-300'>Theme</h2>
+            <p className='text-lg text-start text-gray-600 mt-2 dark:text-gray-500'>
               Theme the template should be
             </p>
             <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
               <button
-                className={`group/dark flex justify-between items-center w-28 md:w-fit h-20 md:h-14 ${filters.theme === 'dark' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/dark flex justify-between items-center w-28 md:w-fit h-20 md:h-14 ${filters.theme === 'dark' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, theme: 'dark' })}
               >
                 Dark
@@ -362,7 +371,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/light flex justify-between items-center w-40 md:w-fit h-20 md:h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/light flex justify-between items-center w-40 md:w-fit h-20 md:h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, theme: 'light' })}
                 disabled
               >
@@ -372,7 +381,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/invert flex justify-between items-center row-span-2 w-48 md:w-fit h-20 md:h-14 ${filters.invertColors ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/invert flex justify-between items-center row-span-2 w-48 md:w-fit h-20 md:h-14 ${filters.invertColors ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, invertColors: !filters.invertColors })}
               >
                 Invert Colors
@@ -385,10 +394,10 @@ export const Home = () => {
           <div className='flex justify-start items-start flex-col w-screen pr-4 h-fit md:w-fit'>
             <div className='flex flex-row justify-between items-center flex-wrap w-full'>
               <span>
-                <h2 className='text-2xl font-bold text-start text-gray-800'>
+                <h2 className='text-2xl font-bold text-start text-gray-800 dark:text-gray-300'>
                   Sort ({filters.order === 'asc' ? 'Ascending' : 'Descending'})
                 </h2>
-                <p className='text-lg text-start text-gray-600 mt-2'>
+                <p className='text-lg text-start text-gray-600 mt-2 dark:text-gray-500'>
                   The property to sort the results by.
                 </p>
               </span>
@@ -403,7 +412,7 @@ export const Home = () => {
             </div>
             <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
               <button
-                className={`group/stars flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'stars' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/stars flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'stars' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'stars' })}
               >
                 Stars
@@ -412,7 +421,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/created flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'created' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/created flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'created' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'created' })}
               >
                 Created
@@ -421,7 +430,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/updated flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'updated' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/updated flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'updated' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'updated' })}
               >
                 Updated
@@ -430,7 +439,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/full_name flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'full_name' ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/full_name flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'full_name' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => setFilters({ ...filters, sort: 'full_name' })}
               >
                 Name
@@ -442,14 +451,14 @@ export const Home = () => {
           </div>
           <div className='flex justify-start items-start flex-col w-screen h-fit md:w-fit'>
             <span className='w-[90%] md:w-full'>
-              <h2 className='text-2xl font-bold text-start text-gray-800'>Type</h2>
-              <p className='text-lg text-start text-gray-600 mt-2'>
+              <h2 className='text-2xl font-bold text-start text-gray-800 dark:text-gray-300'>Type</h2>
+              <p className='text-lg text-start text-gray-600 mt-2 dark:text-gray-500'>
                 Limit results to repositories of the specified type.
               </p>
             </span>
             <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
               <button
-                className={`group/owner flex justify-between w-fit h-14 ${filters.type.includes('owner') ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/owner flex justify-between w-fit h-14 ${filters.type.includes('owner') ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => handleFilterType('owner')}
               >
                 Owner
@@ -458,7 +467,7 @@ export const Home = () => {
                 />
               </button>
               <button
-                className={`group/member flex justify-between w-fit h-14 ${filters.type.includes('member') ? 'bg-primary-200 text-primary-50' : 'bg-white text-primary-300'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+                className={`group/member flex justify-between w-fit h-14 ${filters.type.includes('member') ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
                 onClick={() => handleFilterType('member')}
               >
                 Member
@@ -470,7 +479,7 @@ export const Home = () => {
           </div>
           <div className='flex justify-between  items-center gap-2 h-fit w-full md:w-[90%] md:justify-end'>
             <button
-              className='flex justify-between w-fit bg-transparent text-primary-300 font-medium py-2 px-6 rounded transition hover:bg-primary-50'
+              className='flex justify-between w-fit bg-transparent text-primary-300 font-medium py-2 px-6 rounded transition hover:bg-primary-50 dark:hover:bg-zinc-800'
               onClick={clearFilters}
             >
               Clear Filters

@@ -17,6 +17,12 @@ export const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const router = createBrowserRouter(routes)
 
+  if (state.theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+
   return (
     <AuthContext.Provider
       value={{

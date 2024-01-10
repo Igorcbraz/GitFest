@@ -62,7 +62,7 @@ export const Landing = () => {
       if (!OAuth) {
         dispatch({
           type: 'SET_GITHUB_USERNAME',
-          payload: { githubUsername }
+          payload: githubUsername
         })
         navigate('/home')
       }
@@ -73,19 +73,19 @@ export const Landing = () => {
   }
 
   return (
-    <div className='bg-white h-screen'>
+    <div className='bg-white h-screen dark:bg-zinc-900'>
       <Navbar/>
       <section className='flex justify-center pb-5 mt-20 h-screen md:pt-32 md:mt-0'>
-        <div className='flex justify-between flex-wrap-reverse w-11/12 md:flex-nowrap gap-0 md:w-3/4 md:gap-32 text-white'>
+        <div className='flex justify-between flex-wrap-reverse w-11/12 md:flex-nowrap gap-0 md:w-3/4 md:gap-32'>
           <div className='flex flex-col justify-between items-center'>
             <div className='flex flex-col items-start mt-10 md:mt-16'>
-              <h1 className='text-[1.7rem] md:text-[3rem] font-bold text-gray-900'>
+              <h1 className='text-[1.7rem] md:text-[3rem] font-bold text-gray-900 dark:text-gray-300'>
                 Create a <span className='text-primary-400'>festival lineup</span> <br/>
                 from your top repositories.
               </h1>
               <hr className='w-full md:w-[85%] bg-gradient-to-r from-primary-500 to-primary-450 h-1 border-0 mb-5 mt-[-0.5rem] md:mt-[-0.7rem]'
               />
-              <p className='text-base text-justify w-full leading-6 text-gray-700 md:leading-7 md:w-5/6'>
+              <p className='text-base text-justify w-full leading-6 text-gray-700 md:leading-7 md:w-5/6 dark:text-gray-400'>
                 Explore the selection of your best repositories and create an incredible lineup for your dream festival.
               </p>
               <div className='w-full flex flex-col justify-center items-center gap-5'>
@@ -100,26 +100,26 @@ export const Landing = () => {
                   <input
                     type='text'
                     placeholder='Github Username'
-                    className='w-full h-12 px-4 rounded-lg shadow-sm shadow-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-opacity-50 text-gray-700 font-bold text-base'
+                    className='w-full h-12 px-4 rounded-lg shadow-sm shadow-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-opacity-50 text-gray-700 font-bold text-base dark:shadow-primary-400 dark:text-gray-300 dark:bg-zinc-800 dark:focus:ring-primary-500 dark:focus:ring-opacity-50'
                     onChange={(e) => setGithubUsername(e.target.value)}
                     value={githubUsername}
                   />
                   <button
                     type='submit'
-                    className={`flex justify-evenly items-center w-2/12 h-12 shadow-lg shadow-primary-100 transition text-white font-bold py-3 px-4 rounded-lg md:px-6 ${githubUsername === '' ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400/90' : 'bg-primary-500 hover:bg-primary-400'}`}
+                    className={`flex justify-evenly items-center w-2/12 h-12 shadow-lg shadow-primary-100 transition text-white font-bold py-3 px-4 rounded-lg md:px-6 dark:shadow-zinc-800 ${githubUsername === '' ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400/90 dark:bg-zinc-600 dark:hover:bg-zinc-600/90' : 'bg-primary-500 hover:bg-primary-400'}`}
                     disabled={githubUsername === ''}
                   >
                     <ArrowRightCircleIcon className='w-7 h-7'/>
                   </button>
                 </form>
                 <div className='w-full flex justify-center items-center'>
-                  <hr className='w-1/5 bg-gray-200 h-0.5 border-0'/>
-                  <span className='mx-2 text-gray-400'>or</span>
-                  <hr className='w-1/5 bg-gray-200 h-0.5 border-0'/>
+                  <hr className='w-1/5 bg-gray-200 h-0.5 border-0 dark:bg-zinc-700'/>
+                  <span className='mx-2 text-gray-400 dark:text-gray-500'>or</span>
+                  <hr className='w-1/5 bg-gray-200 h-0.5 border-0 dark:bg-zinc-700'/>
                 </div>
                 <span className='w-full flex justify-center items-center'>
                   <button
-                    className='group/btngithub flex justify-evenly items-center w-1/2 h-12 shadow-lg shadow-primary-100 transition bg-primary-500 text-white font-bold py-3 px-4 rounded-lg  hover:bg-primary-400 gap-4 md:px-6 md:w-2/5'
+                    className='group/btngithub flex justify-evenly items-center w-1/2 h-12 shadow-lg shadow-primary-100 transition bg-primary-500 text-white font-bold py-3 px-4 rounded-lg  hover:bg-primary-400 gap-4 md:px-6 md:w-2/5 dark:shadow-zinc-800'
                     onClick={() => signIn(true)}
                   >
                     Login With Github
