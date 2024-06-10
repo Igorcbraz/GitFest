@@ -65,22 +65,24 @@ $ npm start
 
 ## Related
 
-[Instafest](https://www.instafest.app/) - Version to create lineup by your top songs
-
-## Support
-
-<a href="https://www.buymeacoffee.com/igorcbraz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+[Instafest](https://www.instafest.app/) - Version to create festival lineup by your top songs
+[Receiptify](https://receiptify.herokuapp.com/) - Get most played tracks in a Receipt format
 
 ## You may also like...
 
 - [Calculator](https://github.com/Igorcbraz/Calculadora) - Explain prefer-color-scheme with calculator project
+- [GitFest Article](https://medium.com/@igorcbraz/create-a-festival-lineup-with-your-github-repositories-49229026f042) - Medium post talking more about GitFest
 
 ## License
 
 MIT
 
+
+## Support
+
+<a href="https://www.buymeacoffee.com/igorcbraz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 ---
 
-> [igorcbraz.me](https://igorcbraz.me) &nbsp;&middot;&nbsp;
 > GitHub [@Igorcbraz](https://github.com/Igorcbraz) &nbsp;&middot;&nbsp;
 > Linkedin [@Igorcbraz](https://www.linkedin.com/in/igorcbraz/)
