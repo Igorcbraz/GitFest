@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b600a29e.css",
+    "main.js": "/static/js/main.16366fbd.js",
+    "static/media/dark-template.png": "/static/media/dark-template.087b16bdb3b10eaf6fc7.png",
+    "static/media/Lolapeluza.ttf": "/static/media/Lolapeluza.a2ab17e66768b7caf3c8.ttf",
+    "static/media/BebasKai.otf": "/static/media/BebasKai.af73723c32aa51e7b02d.otf",
+    "index.html": "/index.html",
+    "main.b600a29e.css.map": "/static/css/main.b600a29e.css.map",
+    "main.16366fbd.js.map": "/static/js/main.16366fbd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b600a29e.css",
+    "static/js/main.16366fbd.js"
+  ]
+}
