@@ -7,51 +7,51 @@ export const initialState = JSON.parse(localStorage.getItem('user')) || {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-  case 'LOGIN': {
-    const user = {
-      ...state,
-      ...action.payload,
-      isLoggedIn: true
-    }
+    case 'LOGIN': {
+      const user = {
+        ...state,
+        ...action.payload,
+        isLoggedIn: true
+      }
 
-    localStorage.setItem('user', JSON.stringify(user))
-    return user
-  }
-  case 'LOGOUT': {
-    localStorage.clear()
-
-    return {
-      ...state,
-      isLoggedIn: false,
-      githubUsername: null,
-      theme: themePreference
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
     }
-  }
-  case 'SET_GITHUB_USERNAME': {
-    const user = {
-      ...state,
-      githubUsername: action.payload
-    }
+    case 'LOGOUT': {
+      localStorage.clear()
 
-    localStorage.setItem('user', JSON.stringify(user))
-    return user
-  }
-  case 'SET_THEME': {
-    const user = {
-      ...state,
-      theme: action.payload
+      return {
+        ...state,
+        isLoggedIn: false,
+        githubUsername: null,
+        theme: themePreference
+      }
     }
+    case 'SET_GITHUB_USERNAME': {
+      const user = {
+        ...state,
+        githubUsername: action.payload
+      }
 
-    if (user.theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
     }
+    case 'SET_THEME': {
+      const user = {
+        ...state,
+        theme: action.payload
+      }
 
-    localStorage.setItem('user', JSON.stringify(user))
-    return user
+      if (user.theme === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
+    }
+    default:
+      return state
   }
-  default:
-    return state;
-  }
-};
+}

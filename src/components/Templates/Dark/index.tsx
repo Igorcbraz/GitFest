@@ -1,23 +1,25 @@
-import { useEffect, useState } from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import './styles.css'
 
-export function DarkTemplate({ username, data, className, invertColors }) {
-  const [repositoriesNames, setRepositoriesNames] = useState(data)
+interface DarkTemplateProps {
+  username: string;
+  data: string[];
+  className?: string;
+  invertColors?: boolean;
+}
+
+export function DarkTemplate({ username, data, className, invertColors }: DarkTemplateProps) {
+  const [repositoriesNames, setRepositoriesNames] = useState<string[]>(data)
   const [titleFontSize, setTitleFontSize] = useState('10rem')
 
   useEffect(() => {
-    const elements = document.querySelectorAll('[class^="t1"][class*="light"], [class^="t1"][class*="dark"]');
-
+    const elements = document.querySelectorAll('[class^="t1"][class*="light"], [class^="t1"][class*="dark"]')
     elements.forEach(element => {
-      const classes = element.getAttribute('class')
-
+      const classes = element.getAttribute('class') || ''
       let updatedClasses = classes
-      if (classes.includes('light')) {
-        updatedClasses = classes.replace('light', 'dark')
-      } else if (classes.includes('dark')) {
-        updatedClasses = classes.replace('dark', 'light')
-      }
-
+      if (classes.includes('light')) updatedClasses = classes.replace('light', 'dark')
+      else if (classes.includes('dark')) updatedClasses = classes.replace('dark', 'light')
       element.setAttribute('class', updatedClasses)
     })
   }, [invertColors])
@@ -25,63 +27,49 @@ export function DarkTemplate({ username, data, className, invertColors }) {
   useEffect(() => {
     setRepositoriesNames(data)
     const maxSumLength = 35
-
     for (let i = 0; i < data.length; i += 2) {
       const item1 = data[i]
       const item2 = data[i + 1]
-
       const sumLength = (item1 ? item1.length : 0) + (item2 ? item2.length : 0)
-
-      if (sumLength > maxSumLength) {
-        if (item2) {
-          const remainingLength = maxSumLength - (item1 ? item1.length : 0)
-          setRepositoriesNames(prevState => {
-            const newState = [...prevState]
-            newState[i + 1] = item2.substring(0, remainingLength)
-            return newState
-          })
-        }
+      if (sumLength > maxSumLength && item2) {
+        const remainingLength = maxSumLength - (item1 ? item1.length : 0)
+        setRepositoriesNames(prev => {
+          const next = [...prev]
+          next[i + 1] = item2.substring(0, remainingLength)
+          return next
+        })
       }
     }
   }, [data])
 
   useEffect(() => {
     if (username) {
-      const size = (8 - (username.length / 10)).toFixed(2)
-      const fontSize =`${size}rem`
-      setTitleFontSize(fontSize)
+      const size = (8 - username.length / 10).toFixed(2)
+      setTitleFontSize(`${size}rem`)
     }
   }, [username])
 
   if (repositoriesNames.length <= 0) {
     return (
-      <div
-        className='inline-block h-8 w-8 animate-spin rounded-full text-primary-400 border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]'
-      >
-        <span className='!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]'>
-          Loading...
-        </span>
+      <div className='inline-block h-8 w-8 animate-spin rounded-full text-primary-400 border-4 border-solid border-current border-r-transparent'>
+        <span className='sr-only'>Loading...</span>
       </div>
     )
   }
 
-  // Svg exported from external program
   return (
     <svg id='dark-template' className={className} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 650'>
       <defs>
-        {/* DO NOT REMOVE TAG STYLE */}
-        <style>
-
-        </style>
+        <style></style>
         <linearGradient id='linear-gradient' x1='238.5' y1='676' x2='238.5' y2='-37' gradientUnits='userSpaceOnUse'>
-          <stop offset='0' stopColor='#dd9f87'/>
-          <stop offset='0.008' stopColor='#dd9f87'/>
-          <stop offset='0.423' stopColor='#b074ad'/>
-          <stop offset='1' stopColor='#4b2a5d'/>
+          <stop offset='0' stopColor='#dd9f87' />
+          <stop offset='0.008' stopColor='#dd9f87' />
+          <stop offset='0.423' stopColor='#b074ad' />
+          <stop offset='1' stopColor='#4b2a5d' />
         </linearGradient>
         <linearGradient id='linear-gradient-neutral' x1='238.5' y1='676' x2='238.5' y2='-37' gradientUnits='userSpaceOnUse'>
-          <stop offset='0' stopColor='#434343'/>
-          <stop offset='1' stopColor='#1b1b1b'/>
+          <stop offset='0' stopColor='#434343' />
+          <stop offset='1' stopColor='#1b1b1b' />
         </linearGradient>
       </defs>
       <rect id='Retângulo_1' data-name='Retângulo 1' className='t1-background-dark' x='-45' y='-37' width='567' height='713'/>
