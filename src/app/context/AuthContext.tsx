@@ -8,6 +8,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
   githubUsername: null,
   theme: themePreference,
+  isLoading: true,
 };
 
 export const AuthContext = createContext<{ state: AuthState; dispatch: Dispatch<AuthAction>; } | undefined>(undefined);
@@ -25,7 +26,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
       if (typeof window !== 'undefined') {
         localStorage.clear();
       }
-      return { isLoggedIn: false, githubUsername: null, theme: themePreference };
+      return { isLoggedIn: false, githubUsername: null, theme: themePreference, isLoading: false };
     }
     case 'SET_GITHUB_USERNAME': {
       const user = { ...state, githubUsername: action.payload };
@@ -42,6 +43,9 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
         localStorage.setItem('user', JSON.stringify(user));
       }
       return user;
+    }
+    case 'INIT_COMPLETE': {
+      return { ...state, isLoading: false };
     }
     default:
       return state;
@@ -61,6 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         dispatch({ type: 'LOGIN', payload: parsed });
       } catch {}
     }
+    dispatch({ type: 'INIT_COMPLETE' });
   }, []);
 
   return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;

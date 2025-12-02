@@ -1,6 +1,5 @@
 import React from 'react';
-import { ArrowDownIcon } from '@heroicons/react/24/solid';
-import { StarIcon, ClockIcon, PencilSquareIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon, StarIcon, ClockIcon, PencilSquareIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
 type Filters = {
   theme: 'dark' | 'light';
@@ -11,51 +10,47 @@ type Filters = {
 };
 
 export default function SortControls({ filters, setFilters }: { filters: Filters; setFilters: React.Dispatch<React.SetStateAction<Filters>> }) {
+  const sortOptions = [
+    { value: 'stars', label: 'Stars', icon: StarIcon },
+    { value: 'created', label: 'Created', icon: ClockIcon },
+    { value: 'updated', label: 'Updated', icon: PencilSquareIcon },
+    { value: 'full_name', label: 'Name', icon: DocumentTextIcon },
+  ] as const;
+
   return (
-    <div className='flex justify-start items-start flex-col w-screen pr-4 h-fit md:w-fit'>
-      <div className='flex flex-row justify-between items-center flex-wrap w-full'>
-        <span>
-          <h2 className='text-2xl font-bold text-start text-gray-800 dark:text-gray-300'>
-            Sort ({filters.order === 'asc' ? 'Ascending' : 'Descending'})
-          </h2>
-          <p className='text-lg text-start text-gray-600 mt-2 dark:text-gray-500'>The property to sort the results by.</p>
-        </span>
+    <div className='space-y-3'>
+      <div className='flex items-center justify-between'>
+        <div>
+          <h3 className='text-sm font-bold text-gray-900 dark:text-white mb-1'>Sort By</h3>
+          <p className='text-xs text-gray-600 dark:text-gray-400'>
+            {filters.order === 'asc' ? 'Ascending' : 'Descending'}
+          </p>
+        </div>
         <button
-          className='text-primary-300 mr-5'
+          className='group relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-600 dark:text-gray-400 transition-all hover:scale-110 active:scale-95 overflow-hidden'
           onClick={() => setFilters((prev) => ({ ...prev, order: prev.order === 'asc' ? 'desc' : 'asc' }))}
+          aria-label='Toggle sort order'
         >
-          <ArrowDownIcon className={`w-6 h-6 ml-2 duration-500 transition-transform ${filters.order === 'asc' ? 'rotate-0' : 'rotate-180'}`} />
+          <div className='absolute inset-0 bg-gradient-to-br from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+          <ArrowDownIcon className={`relative z-10 w-4 h-4 transition-transform duration-500 ${filters.order === 'desc' ? 'rotate-180' : ''}`} />
         </button>
       </div>
-      <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
-        <button
-          className={`group/stars flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'stars' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-          onClick={() => setFilters((prev) => ({ ...prev, sort: 'stars' }))}
-        >
-          Stars
-          <StarIcon className='w-6 h-6 ml-2 duration-500 transition-transform' />
-        </button>
-        <button
-          className={`group/created flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'created' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-          onClick={() => setFilters((prev) => ({ ...prev, sort: 'created' }))}
-        >
-          Created
-          <ClockIcon className='w-6 h-6 ml-2 duration-500 transition-transform' />
-        </button>
-        <button
-          className={`group/updated flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'updated' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-          onClick={() => setFilters((prev) => ({ ...prev, sort: 'updated' }))}
-        >
-          Updated
-          <PencilSquareIcon className='w-6 h-6 ml-2 duration-500 transition-transform' />
-        </button>
-        <button
-          className={`group/full_name flex justify-between w-32 md:w-fit h-14 ${filters.sort === 'full_name' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-          onClick={() => setFilters((prev) => ({ ...prev, sort: 'full_name' }))}
-        >
-          Name
-          <DocumentTextIcon className='w-6 h-6 ml-2 duration-500 transition-transform' />
-        </button>
+      <div className='grid grid-cols-2 gap-2'>
+        {sortOptions.map(({ value, label, icon: Icon }) => (
+          <button
+            key={value}
+            className={`group relative flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl font-semibold text-xs transition-all overflow-hidden ${
+              filters.sort === value
+                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-lg scale-105'
+                : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-600 hover:scale-105'
+            }`}
+            onClick={() => setFilters((prev) => ({ ...prev, sort: value }))}
+          >
+            <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${filters.sort === value ? 'opacity-50' : ''}`}></div>
+            <Icon className={`relative z-10 w-3.5 h-3.5 transition-transform duration-300 ${filters.sort === value ? 'scale-110' : 'group-hover:scale-110'}`} />
+            <span className='relative z-10'>{label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoonIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
+import { MoonIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
 type Filters = {
   theme: 'dark' | 'light';
@@ -11,32 +11,44 @@ type Filters = {
 
 export default function ThemeControls({ filters, setFilters }: { filters: Filters; setFilters: React.Dispatch<React.SetStateAction<Filters>> }) {
   return (
-    <div className='flex justify-start items-start flex-col w-screen pr-4 h-fit md:w-fit'>
-      <h2 className='text-2xl font-bold text-start text-gray-800 dark:text-gray-300'>Theme</h2>
-      <p className='text-lg text-start text-gray-600 mt-2 dark:text-gray-500'>Theme the template should be</p>
-      <div className='flex justify-start items-center flex-wrap gap-5 mt-5'>
+    <div className='space-y-3'>
+      <div>
+        <h3 className='text-sm font-bold text-gray-900 dark:text-white mb-1'>Theme</h3>
+        <p className='text-xs text-gray-600 dark:text-gray-400'>Choose your lineup style</p>
+      </div>
+      <div className='space-y-2'>
         <button
-          className={`group/dark flex justify-between items-center w-28 md:w-fit h-20 md:h-14 ${filters.theme === 'dark' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
+          className={`group relative w-full flex items-center justify-between px-4 py-2.5 rounded-xl font-semibold text-sm transition-all overflow-hidden ${
+            filters.theme === 'dark'
+              ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-lg scale-105'
+              : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-600 hover:scale-105'
+          }`}
           onClick={() => setFilters((prev) => ({ ...prev, theme: 'dark' }))}
         >
-          Dark
-          <MoonIcon className='w-6 h-6 ml-2 group-hover/dark:animate-pulse duration-150' />
+          <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${filters.theme === 'dark' ? 'opacity-50' : ''}`}></div>
+          <span className='relative z-10'>Dark</span>
+          <MoonIcon className={`relative z-10 w-4 h-4 transition-transform duration-300 ${filters.theme === 'dark' ? 'rotate-12' : 'group-hover:rotate-12'}`} />
         </button>
         <button
-          className={`group/light flex justify-between items-center w-40 md:w-fit h-20 md:h-14 ${filters.theme === 'light' ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-          onClick={() => setFilters((prev) => ({ ...prev, theme: 'light' }))}
+          className='relative w-full flex items-center justify-between px-4 py-2.5 rounded-xl font-medium text-sm bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-gray-600 cursor-not-allowed overflow-hidden'
           disabled
         >
-          Light (Soon)
-          <ArrowPathIcon className='w-6 h-6 ml-2' />
+          <span>Light</span>
+          <ArrowPathIcon className='w-4 h-4' />
+          <div className='absolute inset-0 bg-gradient-to-br from-gray-200/50 to-gray-100/50 dark:from-zinc-700/50 dark:to-zinc-800/50'></div>
         </button>
-        <button
-          className={`group/invert flex justify-between items-center row-span-2 w-48 md:w-fit h-20 md:h-14 ${filters.invertColors ? 'bg-primary-200 text-primary-50 dark:bg-primary-400 dark:hover:text-primary-100' : 'bg-white text-primary-300 dark:bg-zinc-800 dark:hover:text-primary-400'} font-bold p-4 rounded transition hover:bg-primary-200 hover:text-primary-50`}
-          onClick={() => setFilters((prev) => ({ ...prev, invertColors: !prev.invertColors }))}
-        >
-          Invert Colors
-          <ArrowPathIcon className={`w-6 h-6 ml-2 duration-500 transition-transform ${filters.invertColors ? '-rotate-180' : 'rotate-0'} transform group-hover/invert:-rotate-180`} />
-        </button>
+        <div className='pt-1'>
+          <label className='group relative flex items-center justify-between px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer transition-all hover:scale-105 overflow-hidden'>
+            <div className='absolute inset-0 bg-gradient-to-r from-primary-500/5 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+            <span className='relative z-10 text-sm font-semibold text-gray-700 dark:text-gray-300'>Invert Colors</span>
+            <input
+              type='checkbox'
+              checked={filters.invertColors}
+              onChange={() => setFilters((prev) => ({ ...prev, invertColors: !prev.invertColors }))}
+              className='relative z-10 w-11 h-6 appearance-none bg-gray-300 dark:bg-zinc-600 rounded-full cursor-pointer transition-all checked:bg-gradient-to-r checked:from-primary-500 checked:to-secondary-500 shadow-inner after:content-[""] after:absolute after:top-0.5 after:left-0.5 after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-all after:shadow-md checked:after:translate-x-5 hover:shadow-lg'
+            />
+          </label>
+        </div>
       </div>
     </div>
   );
