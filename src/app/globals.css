@@ -198,6 +198,12 @@
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
+
+  /* SVG responsivo */
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 @layer utilities {

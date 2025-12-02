@@ -58,7 +58,7 @@ export function DarkTemplate({ username, data, className, invertColors }: DarkTe
   }
 
   return (
-    <svg id='dark-template' className={className} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 650'>
+    <svg id='dark-template' className={className} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 650' preserveAspectRatio='xMidYMid meet' width='100%' height='100%'>
       <defs>
         <style></style>
         <linearGradient id='linear-gradient' x1='238.5' y1='676' x2='238.5' y2='-37' gradientUnits='userSpaceOnUse'>

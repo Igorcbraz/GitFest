@@ -32,7 +32,7 @@ export const Mobile: React.FC = () => {
 
   return (
     <nav
-      className='fixed z-50 top-0 left-0 right-0 flex justify-center'
+      className='fixed z-50 top-0 left-0 right-0 flex flex-col'
       style={{
         transform: isScrolled ? 'translateY(0.75rem)' : 'translateY(0)',
         transition: 'transform 1.2s cubic-bezier(0.33, 1, 0.68, 1)'
@@ -41,8 +41,8 @@ export const Mobile: React.FC = () => {
       <div
         className='w-full'
         style={{
-          paddingLeft: isScrolled ? '4%' : '0',
-          paddingRight: isScrolled ? '4%' : '0',
+          paddingLeft: isScrolled ? '1rem' : '0',
+          paddingRight: isScrolled ? '1rem' : '0',
           transition: 'padding 1.2s cubic-bezier(0.33, 1, 0.68, 1)'
         }}
       >
@@ -106,22 +106,18 @@ export const Mobile: React.FC = () => {
 
       {/*Mobile Menu */}
       <div
+        className='w-full'
         style={{
           transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           maxHeight: isOpen ? '20rem' : '0',
           opacity: isOpen ? 1 : 0,
-          overflow: 'hidden'
+          overflow: 'hidden',
+          paddingLeft: isScrolled ? '1rem' : '0',
+          paddingRight: isScrolled ? '1rem' : '0'
         }}
       >
-        <div
-          className='container pb-4'
-          style={{
-            paddingLeft: isScrolled ? '1rem' : undefined,
-            paddingRight: isScrolled ? '1rem' : undefined,
-            transition: 'padding 1.2s cubic-bezier(0.33, 1, 0.68, 1)'
-          }}
-        >
-          <div className='flex flex-col gap-2 p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700'>
+        <div className='px-4 pb-4 pt-2'>
+          <div className='flex flex-col gap-2 p-3 rounded-xl bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl border border-gray-200 dark:border-zinc-700 shadow-lg'>
             <a
               href='https://github.com/Igorcbraz/GitFest#readme'
               target='_blank'

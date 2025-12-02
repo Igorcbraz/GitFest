@@ -16,7 +16,7 @@ export default function TemplatePreview({ username, data, invertColors }: { user
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         style={{ transform: (props.xys as any).to(trans) }}
       >
-        <div className='relative overflow-hidden rounded-xl w-full h-full flex items-center justify-center'>
+        <div className='relative overflow-visible rounded-xl w-full h-full flex items-center justify-center'>
           <DarkTemplate
             username={username}
             data={data}

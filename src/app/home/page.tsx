@@ -80,7 +80,7 @@ export default function HomePage() {
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [info, setInfo] = useState<any>({})
-  //eslint-disable-next-line no-unused-vars
+
   const [repositories, setRepositories] = useState<Repo[]>([])
   const [filterRepositories, setFilterRepositories] = useState<string[]>([])
   const [filters, setFilters] = useState<Filters>(defaultFilters)
@@ -356,16 +356,16 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 h-[calc(100vh-12rem)]'>
-              <div className='order-2 lg:order-1 h-full flex items-center'>
+            <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:h-[calc(100vh-12rem)]'>
+              <div className='order-1 lg:order-1 flex items-center py-6 lg:py-0 lg:h-full'>
                 <div className='w-full h-full flex items-center justify-center'>
-                  <div className='relative p-4 rounded-2xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 shadow-xl w-full max-w-[650px] h-full flex items-center justify-center'>
+                  <div className='relative p-4 rounded-2xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 shadow-xl w-full max-w-[650px] h-full max-h-[650px] lg:max-h-full flex items-center justify-center'>
                     <div className='w-full h-[95%] bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 dark:from-zinc-700 dark:via-zinc-800 dark:to-zinc-700 rounded-xl animate-pulse'></div>
                   </div>
                 </div>
               </div>
 
-              <div className='space-y-3 order-1 lg:order-2 h-full flex flex-col animate-pulse'>
+              <div className='space-y-3 order-2 lg:order-2 lg:h-full flex flex-col animate-pulse'>
                 <div className='flex items-center gap-2.5 pb-3 border-b border-gray-200/50 dark:border-zinc-700/50 flex-shrink-0'>
                   <div className='w-9 h-9 rounded-xl bg-gray-200 dark:bg-zinc-800'></div>
                   <div className='h-6 w-24 bg-gray-200 dark:bg-zinc-800 rounded'></div>
@@ -402,52 +402,52 @@ export default function HomePage() {
 
       <main className='py-6 min-h-screen'>
         <div className='container max-w-[1600px] px-4 md:px-6 h-full'>
-          <div className='mb-8 animate-fade-in-up'>
-            <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6'>
-              <div className='flex items-center gap-4'>
-                <div className='relative group'>
+          <div className='mb-6 md:mb-8 animate-fade-in-up'>
+            <div className='flex items-start justify-between gap-3'>
+              <div className='flex items-center gap-3 md:gap-4 flex-1 min-w-0'>
+                <div className='relative group flex-shrink-0'>
                   <div className='absolute inset-0 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-500 animate-pulse-soft'></div>
-                  <div className='relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500'>
-                    <SparklesIcon className='w-7 h-7 text-white animate-pulse' />
+                  <div className='relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500'>
+                    <SparklesIcon className='w-6 h-6 md:w-7 md:h-7 text-white animate-pulse' />
                   </div>
                 </div>
-                <div className='flex-1'>
+                <div className='flex-1 min-w-0'>
                   <div className='flex items-center gap-2 mb-1'>
-                    <h1 className='text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight animate-fade-in'>
+                    <h1 className='text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white tracking-tight animate-fade-in truncate'>
                       {username}
                     </h1>
-                    <CheckCircleIcon className='w-5 h-5 text-primary-500 animate-pulse-soft' />
+                    <CheckCircleIcon className='w-4 h-4 md:w-5 md:h-5 text-primary-500 animate-pulse-soft flex-shrink-0' />
                   </div>
                   {info.bio ? (
-                    <p className='text-sm text-gray-600 dark:text-gray-400 line-clamp-1 animate-fade-in' style={{animationDelay: '100ms'}}>
+                    <p className='text-xs md:text-sm text-gray-600 dark:text-gray-400 line-clamp-1 animate-fade-in' style={{animationDelay: '100ms'}}>
                       {info.bio}
                     </p>
                   ) : (
-                    <p className='text-sm text-gray-600 dark:text-gray-400 animate-fade-in' style={{animationDelay: '100ms'}}>
+                    <p className='text-xs md:text-sm text-gray-600 dark:text-gray-400 animate-fade-in' style={{animationDelay: '100ms'}}>
                       Customize and download your festival poster
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className='flex items-center gap-3'>
+              <div className='flex items-center gap-2 flex-shrink-0'>
                 <ThemeToggle />
                 <button
-                  className='group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 font-semibold transition-all text-sm hover:scale-105 hover:shadow-lg active:scale-95 animate-fade-in'
+                  className='group flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 font-semibold transition-all text-xs md:text-sm hover:scale-105 hover:shadow-lg active:scale-95 animate-fade-in'
                   onClick={handleLogout}
                   style={{animationDelay: '200ms'}}
                 >
                   <span className='hidden sm:inline'>Logout</span>
-                  <ArrowUturnLeftIcon className='w-5 h-5 group-hover:translate-x-1 transition-transform duration-300' />
+                  <ArrowUturnLeftIcon className='w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform duration-300' />
                 </button>
               </div>
             </div>
           </div>
 
-          <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 h-[calc(100vh-12rem)]'>
-            <div className='animate-fade-in order-2 lg:order-1 h-full flex items-center'>
-              <div className='w-full h-full flex items-center justify-center'>
-                <div className='group relative p-4 rounded-2xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-400/40 dark:hover:border-primary-500/40 shadow-xl hover:shadow-2xl transition-all duration-700 w-full max-w-[650px] h-full flex items-center justify-center'>
+          <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:h-[calc(100vh-12rem)]'>
+            <div className='order-1 lg:order-1 flex items-center justify-center py-6 lg:py-0 lg:h-full'>
+              <div className='w-full h-full max-w-[600px] mx-auto flex items-center justify-center'>
+                <div className='group relative p-3 sm:p-4 rounded-2xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-400/40 dark:hover:border-primary-500/40 shadow-xl hover:shadow-2xl transition-all duration-700 w-full h-full max-h-[650px] lg:max-h-full flex items-center justify-center'>
                   <div className='absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
                   <div className='absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
 
@@ -461,7 +461,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            <div className='space-y-3 animate-fade-in-up order-1 lg:order-2 h-full flex flex-col' style={{ animationDelay: '50ms' }}>
+            <div className='space-y-3 animate-fade-in-up order-2 lg:order-2 lg:h-full flex flex-col' style={{ animationDelay: '50ms' }}>
               <div className='flex items-center gap-2.5 pb-3 border-b border-gray-200/50 dark:border-zinc-700/50 flex-shrink-0'>
                 <div className='w-9 h-9 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/50 dark:to-primary-800/50 flex items-center justify-center animate-bounce-soft'>
                   <AdjustmentsHorizontalIcon className='w-5 h-5 text-primary-600 dark:text-primary-400' />
@@ -471,7 +471,7 @@ export default function HomePage() {
                 </h2>
               </div>
 
-              <div className='flex-1 overflow-y-auto scrollbar-hide space-y-3'>
+              <div className='flex-1 lg:overflow-y-auto scrollbar-hide space-y-3 lg:max-h-[calc(100vh-20rem)]'>
 
                 <div className='group relative p-4 rounded-xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-300/50 dark:hover:border-primary-600/50 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.01] animate-fade-in-up' style={{animationDelay: '100ms'}}>
                   <div className='absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>

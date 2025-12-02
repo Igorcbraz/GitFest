@@ -36,6 +36,8 @@ const ScrollAnimatedText = () => {
   const lastScrollTime = useRef(0)
   const scrollThrottle = 400
   const scrollAttempts = useRef(0)
+  const touchStartY = useRef(0)
+  const touchEndY = useRef(0)
 
   const words = [
     { text: 'Developers', color: 'text-primary-600 dark:text-primary-400' },
@@ -119,12 +121,71 @@ const ScrollAnimatedText = () => {
       }
     }
 
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!isInView) return
+      touchStartY.current = e.touches[0].clientY
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isInView) return
+
+      const isAtTop = currentWordIndex === 0
+      const isAtBottom = currentWordIndex === words.length - 1
+      const currentY = e.touches[0].clientY
+      const swipingUp = currentY < touchStartY.current
+      const swipingDown = currentY > touchStartY.current
+
+      if ((isAtTop && swipingUp) || (isAtBottom && swipingDown)) {
+        return
+      }
+
+      e.preventDefault()
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!isInView || !sectionRef.current) return
+
+      touchEndY.current = e.changedTouches[0].clientY
+      const swipeDistance = touchStartY.current - touchEndY.current
+      const minSwipeDistance = 50
+
+      if (Math.abs(swipeDistance) > minSwipeDistance) {
+        const now = Date.now()
+        const timeSinceLastScroll = now - lastScrollTime.current
+
+        if (timeSinceLastScroll < scrollThrottle) return
+
+        const isAtTop = currentWordIndex === 0
+        const isAtBottom = currentWordIndex === words.length - 1
+        const swipingDown = swipeDistance > 0
+        const swipingUp = swipeDistance < 0
+
+        if ((isAtTop && swipingUp) || (isAtBottom && swipingDown)) {
+          return
+        }
+
+        if (swipingDown && currentWordIndex < words.length - 1) {
+          setCurrentWordIndex(prev => prev + 1)
+          lastScrollTime.current = now
+        } else if (swipingUp && currentWordIndex > 0) {
+          setCurrentWordIndex(prev => prev - 1)
+          lastScrollTime.current = now
+        }
+      }
+    }
+
     window.addEventListener('wheel', handleWheel, { passive: false })
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchmove', handleTouchMove, { passive: false })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     return () => {
       window.removeEventListener('wheel', handleWheel)
       window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleTouchEnd)
     }
   }, [isInView, currentWordIndex, words.length])
 
@@ -152,7 +213,7 @@ const ScrollAnimatedText = () => {
               once={false}
             />
 
-            <div className='relative min-h-[200px] flex items-center justify-center'>
+            <div className='relative min-h-[150px] md:min-h-[200px] flex items-center justify-center'>
               {words.map((word, index) => {
                 const isActive = index === currentWordIndex
                 const isPast = index < currentWordIndex
@@ -160,7 +221,7 @@ const ScrollAnimatedText = () => {
                 return (
                   <h2
                     key={index}
-                    className={`absolute text-6xl md:text-8xl lg:text-9xl font-bold ${word.color} pointer-events-none will-change-transform`}
+                    className={`absolute text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-bold ${word.color} pointer-events-none will-change-transform`}
                     style={{
                       opacity: isActive ? 1 : 0,
                       transform: `
@@ -192,8 +253,8 @@ const ScrollAnimatedText = () => {
             </div>
 
             <TextFade
-              text='Scroll to navigate between words'
-              className='text-sm text-gray-500 dark:text-gray-400 mt-4'
+              text='Scroll or swipe to navigate'
+              className='text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-4'
               delay={0.8}
               once={false}
             />
@@ -356,7 +417,7 @@ export default function LandingPage() {
 
       <Navbar />
 
-      <section className='relative min-h-screen flex items-center overflow-hidden pt-20'>
+      <section className='relative min-h-[calc(100vh-4rem)] md:min-h-screen flex items-center overflow-hidden pt-16 md:pt-20 pb-8 md:pb-0'>
         <div className='absolute inset-0 opacity-20 dark:opacity-10' style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgb(149 117 149 / 0.12) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         <div className='absolute bottom-0 left-0 w-full h-[600px] bg-gradient-to-b from-transparent via-white/30 to-white dark:from-transparent dark:via-zinc-900/30 dark:to-zinc-900 -z-10'></div>
 
@@ -366,12 +427,12 @@ export default function LandingPage() {
         <div className='absolute bottom-1/4 left-1/3 w-1 h-24 bg-gradient-to-t from-secondary-300/20 to-transparent'></div>
 
         <div className='container relative z-10'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-24 items-center'>
 
-            <div className='space-y-8'>
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-                <SparklesIcon className='w-4 h-4 text-primary-600 dark:text-primary-400 animate-pulse' />
-                <span className='text-sm font-medium text-primary-700 dark:text-primary-300'>
+            <div className='space-y-6 md:space-y-8'>
+              <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+                <SparklesIcon className='w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-600 dark:text-primary-400 animate-pulse' />
+                <span className='text-xs sm:text-sm font-medium text-primary-700 dark:text-primary-300'>
                   Transform your GitHub profile
                 </span>
               </div>
@@ -382,23 +443,23 @@ export default function LandingPage() {
                     <TextAnimate
                       text='Your Repositories,'
                       type='heading'
-                      className='text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight'
+                      className='text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight'
                       delay={0.3}
                       once={false}
                     />
                   </div>
-                  <div className='flex flex-wrap items-center gap-x-4'>
+                  <div className='flex flex-wrap items-center gap-x-2 sm:gap-x-4'>
                     <TextAnimate
                       text='Reimagined as a'
                       type='heading'
-                      className='text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight'
+                      className='text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight'
                       delay={0.5}
                       once={false}
                     />
                     <TextGradient
                       text='Festival Lineup'
                       as='span'
-                      className='text-5xl md:text-6xl lg:text-7xl font-extrabold whitespace-nowrap'
+                      className='text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold whitespace-nowrap'
                       gradientClassName='from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400'
                       delay={0.8}
                       once={false}
@@ -408,7 +469,7 @@ export default function LandingPage() {
 
                 <TextBlur
                   text='Showcase your coding journey with powerful visual magic'
-                  className='text-xl font-light text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed'
+                  className='text-base sm:text-lg md:text-xl font-light text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed'
                   delay={1.2}
                   once={false}
                 />
@@ -466,7 +527,7 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              <div className={`flex items-center gap-8 pt-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+              <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 md:gap-8 pt-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
                 <div className='flex items-center gap-2 hover:scale-105 transition-transform duration-300'>
                   <div className='flex -space-x-2'>
                     {[1, 2, 3].map((i) => (
@@ -477,15 +538,15 @@ export default function LandingPage() {
                       />
                     ))}
                   </div>
-                  <span className='text-sm text-gray-600 dark:text-gray-400'>
+                  <span className='text-xs sm:text-sm text-gray-600 dark:text-gray-400'>
                     Join <strong className='text-gray-900 dark:text-white animate-pulse'>{loading ? '...' : `${stars}`}</strong> starred project
                   </span>
                 </div>
                 <div className='flex items-center gap-1 hover:scale-105 transition-transform duration-300'>
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <StarIcon key={i} className='w-4 h-4 fill-yellow-400 text-yellow-400 animate-pulse-soft' style={{animationDelay: `${i * 0.1}s`}} />
+                    <StarIcon key={i} className='w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400 animate-pulse-soft' style={{animationDelay: `${i * 0.1}s`}} />
                   ))}
-                  <span className='ml-2 text-sm text-gray-600 dark:text-gray-400'>
+                  <span className='ml-1 sm:ml-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400'>
                     <strong className='text-gray-900 dark:text-white'>{loading ? '...' : watchers}</strong> watching
                   </span>
                 </div>
@@ -526,18 +587,18 @@ export default function LandingPage() {
           <circle cx='80%' cy='20%' r='4' fill='currentColor' className='text-secondary-400 animate-pulse-soft' style={{animationDelay: '1.5s'}} />
         </svg>
 
-        <div className='container mx-auto px-6 md:px-12 relative z-10'>
+        <div className='container mx-auto px-4 sm:px-6 md:px-12 relative z-10'>
           <div className='max-w-7xl mx-auto'>
             <div className='text-center mb-24'>
-              <div className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-100/80 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 mb-8 shadow-lg'>
-                <SparklesIcon className='w-5 h-5 text-primary-600 dark:text-primary-400 animate-pulse-soft' />
-                <span className='text-sm font-semibold text-primary-700 dark:text-primary-300'>
+              <div className='inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-primary-100/80 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 mb-6 sm:mb-8 shadow-lg'>
+                <SparklesIcon className='w-4 h-4 sm:w-5 sm:h-5 text-primary-600 dark:text-primary-400 animate-pulse-soft' />
+                <span className='text-xs sm:text-sm font-semibold text-primary-700 dark:text-primary-300'>
                   Discover the Benefits
                 </span>
               </div>
 
-              <h2 className='text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight'>
-                <TextFade text='Why Choose' className='text-gray-900 dark:text-white inline-block mr-4' delay={0.2} once={false} />
+              <h2 className='text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8 leading-tight'>
+                <TextFade text='Why Choose' className='text-gray-900 dark:text-white inline-block mr-2 sm:mr-4' delay={0.2} once={false} />
                 <TextShimmer
                   text='GitFest'
                   className='text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-700 dark:from-primary-400 dark:via-secondary-400 dark:to-primary-500 inline-block'
@@ -548,14 +609,14 @@ export default function LandingPage() {
 
               <TextSlide
                 text='The easiest way to showcase your coding journey with style'
-                className='text-xl md:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed'
+                className='text-base sm:text-lg md:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed px-4'
                 direction='up'
                 delay={0.5}
                 once={false}
               />
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 relative'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10 relative'>
               {features.map((feature, index) => {
                 const delays = ['0s', '0.2s', '0.4s']
                 const hoverColors = [
@@ -578,7 +639,7 @@ export default function LandingPage() {
                       animationFillMode: 'forwards'
                     }}
                   >
-                    <div className={`relative h-full p-8 rounded-3xl bg-white/50 dark:bg-zinc-800/50 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 ${hoverColors[index]} transition-all duration-700 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl shadow-lg overflow-hidden`}>
+                    <div className={`relative h-full p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/50 dark:bg-zinc-800/50 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 ${hoverColors[index]} transition-all duration-700 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl shadow-lg overflow-hidden`}>
 
                       <div className={`absolute inset-0 bg-gradient-to-br ${gradients[index]} opacity-0 group-hover:opacity-100 transition-opacity duration-700`}></div>
 
@@ -597,12 +658,12 @@ export default function LandingPage() {
 
                         <TextScale
                           text={feature.title}
-                          className='text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500'
+                          className='text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 text-center group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500'
                           delay={parseFloat(delays[index])}
                           once={false}
                         />
 
-                        <p className='text-base text-gray-600 dark:text-gray-400 leading-relaxed text-center group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-500'>
+                        <p className='text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed text-center group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-500'>
                           {feature.description}
                         </p>
 
@@ -624,10 +685,10 @@ export default function LandingPage() {
               })}
             </div>
 
-            <div className='mt-20 text-center'>
-              <div className='inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10 backdrop-blur-sm border border-primary-300/30 dark:border-primary-600/30 hover:scale-105 transition-all duration-300 animate-bounce-soft'>
-                <CheckCircleIcon className='w-5 h-5 text-primary-600 dark:text-primary-400 animate-pulse' />
-                <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+            <div className='mt-12 sm:mt-16 md:mt-20 text-center'>
+              <div className='inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10 backdrop-blur-sm border border-primary-300/30 dark:border-primary-600/30 hover:scale-105 transition-all duration-300 animate-bounce-soft'>
+                <CheckCircleIcon className='w-4 h-4 sm:w-5 sm:h-5 text-primary-600 dark:text-primary-400 animate-pulse' />
+                <span className='text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300'>
                   {loading ? 'Loading...' : `${stars} GitHub stars • ${forks} forks • Open source`}
                 </span>
               </div>
@@ -667,15 +728,15 @@ export default function LandingPage() {
         <div className='container mx-auto px-6 md:px-12 relative z-10 mb-16'>
           <div className='max-w-7xl mx-auto'>
             <div className='text-center mb-12'>
-              <div className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary-100/80 dark:bg-secondary-900/40 backdrop-blur-sm border border-secondary-200/50 dark:border-secondary-700/50 mb-8 shadow-lg animate-bounce-soft'>
-                <HeartIcon className='w-5 h-5 text-secondary-600 dark:text-secondary-400 animate-pulse-soft' />
-                <span className='text-sm font-semibold text-secondary-700 dark:text-secondary-300'>
+              <div className='inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-secondary-100/80 dark:bg-secondary-900/40 backdrop-blur-sm border border-secondary-200/50 dark:border-secondary-700/50 mb-6 sm:mb-8 shadow-lg animate-bounce-soft'>
+                <HeartIcon className='w-4 h-4 sm:w-5 sm:h-5 text-secondary-600 dark:text-secondary-400 animate-pulse-soft' />
+                <span className='text-xs sm:text-sm font-semibold text-secondary-700 dark:text-secondary-300'>
                   Real Testimonials
                 </span>
               </div>
 
-              <h2 className='text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight'>
-                <TextFade text='Loved by' className='text-gray-900 dark:text-white inline-block mr-4' delay={0.2} once={false} />
+              <h2 className='text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8 leading-tight'>
+                <TextFade text='Loved by' className='text-gray-900 dark:text-white inline-block mr-2 sm:mr-4' delay={0.2} once={false} />
                 <TextRotate
                   text='Developers'
                   className='text-transparent bg-clip-text bg-gradient-to-r from-secondary-600 via-primary-600 to-secondary-700 dark:from-secondary-400 dark:via-primary-400 dark:to-secondary-500 inline-block'
@@ -686,7 +747,7 @@ export default function LandingPage() {
 
               <TextBlur
                 text='See what developers are saying about GitFest'
-                className='text-xl md:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'
+                className='text-base sm:text-lg md:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4'
                 delay={0.5}
                 once={false}
               />
@@ -699,34 +760,34 @@ export default function LandingPage() {
           <div className='absolute right-0 top-0 bottom-0 w-32 md:w-48 bg-gradient-to-l from-white via-white/80 to-transparent dark:from-zinc-900 dark:via-zinc-900/80 dark:to-transparent z-10 pointer-events-none'></div>
 
           <div className='space-y-6 pb-8'>
-            <div className='flex gap-6 animate-scroll-left'>
+            <div className='flex gap-4 md:gap-6 animate-scroll-left'>
               {[...testimonials.slice(0, 3), ...testimonials.slice(0, 3), ...testimonials.slice(0, 3)].map((testimonial, index) => (
                 <div
                   key={`top-${index}`}
-                  className='flex-shrink-0 w-[400px] group'
+                  className='flex-shrink-0 w-[260px] sm:w-[320px] md:w-[400px] group'
                 >
-                  <div className='relative h-full p-8 rounded-3xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-secondary-400/60 dark:hover:border-secondary-500/60 transition-all duration-700 hover:scale-105 hover:-translate-y-2 shadow-xl hover:shadow-2xl overflow-hidden'>
+                  <div className='relative h-full p-4 sm:p-6 md:p-8 rounded-xl md:rounded-3xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-secondary-400/60 dark:hover:border-secondary-500/60 transition-all duration-700 hover:scale-105 hover:-translate-y-2 shadow-xl hover:shadow-2xl overflow-hidden'>
                     <div className={'absolute inset-0 bg-gradient-to-br from-secondary-500/10 to-primary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700'}></div>
 
-                    <div className='absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-secondary-400/20 to-transparent rounded-full blur-2xl group-hover:w-40 group-hover:h-40 transition-all duration-700'></div>
+                    <div className='absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-secondary-400/20 to-transparent rounded-full blur-2xl group-hover:w-24 group-hover:h-24 sm:group-hover:w-36 sm:group-hover:h-36 transition-all duration-700'></div>
 
-                    <div className='absolute top-6 left-6 text-7xl text-secondary-200 dark:text-secondary-800/50 font-serif leading-none pointer-events-none'>"</div>
+                    <div className='absolute top-3 left-3 sm:top-5 sm:left-5 text-4xl sm:text-5xl md:text-7xl text-secondary-200 dark:text-secondary-800/50 font-serif leading-none pointer-events-none'>"</div>
 
-                    <div className='relative z-10 pt-8'>
-                      <p className='text-gray-700 dark:text-gray-300 leading-relaxed mb-8 min-h-[120px] group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-500'>
+                    <div className='relative z-10 pt-5 sm:pt-7'>
+                      <p className='text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 leading-snug sm:leading-relaxed mb-4 sm:mb-6 md:mb-8 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-500'>
                         {testimonial.content}
                       </p>
 
-                      <div className='flex items-center gap-4'>
-                        <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white font-bold text-lg shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                      <div className='flex items-center gap-2 sm:gap-3'>
+                        <div className={`relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white font-bold text-sm sm:text-base md:text-lg shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                           {testimonial.avatar}
-                          <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+                          <div className='absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
                         </div>
                         <div>
-                          <h4 className='font-bold text-gray-900 dark:text-white text-lg group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500'>
+                          <h4 className='font-bold text-gray-900 dark:text-white text-sm sm:text-base md:text-lg group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-500'>
                             {testimonial.name}
                           </h4>
-                          <p className='text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-500'>
+                          <p className='text-xs sm:text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-500'>
                             {testimonial.role}
                           </p>
                         </div>
@@ -742,34 +803,34 @@ export default function LandingPage() {
               ))}
             </div>
 
-            <div className='flex gap-6 animate-scroll-right'>
+            <div className='flex gap-4 md:gap-6 animate-scroll-right'>
               {[...testimonials.slice(3), ...testimonials.slice(3), ...testimonials.slice(3)].map((testimonial, index) => (
                 <div
                   key={`bottom-${index}`}
-                  className='flex-shrink-0 w-[400px] group'
+                  className='flex-shrink-0 w-[260px] sm:w-[320px] md:w-[400px] group'
                 >
-                  <div className='relative h-full p-8 rounded-3xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-400/60 dark:hover:border-primary-500/60 transition-all duration-700 hover:scale-105 hover:-translate-y-2 shadow-xl hover:shadow-2xl overflow-hidden'>
+                  <div className='relative h-full p-4 sm:p-6 md:p-8 rounded-xl md:rounded-3xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-400/60 dark:hover:border-primary-500/60 transition-all duration-700 hover:scale-105 hover:-translate-y-2 shadow-xl hover:shadow-2xl overflow-hidden'>
                     <div className={'absolute inset-0 bg-gradient-to-br from-primary-500/10 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700'}></div>
 
-                    <div className='absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-400/20 to-transparent rounded-full blur-2xl group-hover:w-40 group-hover:h-40 transition-all duration-700'></div>
+                    <div className='absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-primary-400/20 to-transparent rounded-full blur-2xl group-hover:w-24 group-hover:h-24 sm:group-hover:w-36 sm:group-hover:h-36 transition-all duration-700'></div>
 
-                    <div className='absolute top-6 left-6 text-7xl text-primary-200 dark:text-primary-800/50 font-serif leading-none pointer-events-none'>"</div>
+                    <div className='absolute top-3 left-3 sm:top-5 sm:left-5 text-4xl sm:text-5xl md:text-7xl text-primary-200 dark:text-primary-800/50 font-serif leading-none pointer-events-none'>"</div>
 
-                    <div className='relative z-10 pt-8'>
-                      <p className='text-gray-700 dark:text-gray-300 leading-relaxed mb-8 min-h-[120px] group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-500'>
+                    <div className='relative z-10 pt-5 sm:pt-7'>
+                      <p className='text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 leading-snug sm:leading-relaxed mb-4 sm:mb-6 md:mb-8 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-500'>
                         {testimonial.content}
                       </p>
 
-                      <div className='flex items-center gap-4'>
-                        <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white font-bold text-lg shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                      <div className='flex items-center gap-2 sm:gap-3'>
+                        <div className={`relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white font-bold text-sm sm:text-base md:text-lg shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                           {testimonial.avatar}
-                          <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+                          <div className='absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
                         </div>
                         <div>
-                          <h4 className='font-bold text-gray-900 dark:text-white text-lg group-hover:text-secondary-600 dark:group-hover:text-secondary-400 transition-colors duration-500'>
+                          <h4 className='font-bold text-gray-900 dark:text-white text-sm sm:text-base md:text-lg group-hover:text-secondary-600 dark:group-hover:text-secondary-400 transition-colors duration-500'>
                             {testimonial.name}
                           </h4>
-                          <p className='text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-500'>
+                          <p className='text-xs sm:text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-500'>
                             {testimonial.role}
                           </p>
                         </div>
@@ -807,14 +868,14 @@ export default function LandingPage() {
         <div className='container relative z-10'>
           <div className='max-w-7xl mx-auto'>
             <div className='text-center mb-16'>
-              <div className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-100/80 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 mb-8 shadow-lg animate-bounce-soft'>
-                <RocketLaunchIcon className='w-5 h-5 text-primary-600 dark:text-primary-400 animate-pulse-soft' />
-                <span className='text-sm font-semibold text-primary-700 dark:text-primary-300'>
+              <div className='inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-primary-100/80 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 mb-6 sm:mb-8 shadow-lg animate-bounce-soft'>
+                <RocketLaunchIcon className='w-4 h-4 sm:w-5 sm:h-5 text-primary-600 dark:text-primary-400 animate-pulse-soft' />
+                <span className='text-xs sm:text-sm font-semibold text-primary-700 dark:text-primary-300'>
                   Join the Community
                 </span>
               </div>
 
-              <h2 className='text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight'>
+              <h2 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-4'>
                 <TextSlide
                   text='Ready to showcase'
                   className='text-gray-900 dark:text-white inline-block'
@@ -832,7 +893,7 @@ export default function LandingPage() {
 
               <TextBlur
                 text='Join thousands of developers sharing their journey'
-                className='text-xl md:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'
+                className='text-base sm:text-lg md:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto px-4'
                 delay={0.6}
                 once={false}
               />
@@ -845,7 +906,7 @@ export default function LandingPage() {
                 <div className='absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/60 to-transparent'></div>
                 <div className='absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/60 to-transparent'></div>
 
-                <div className='p-12 md:p-16'>
+                <div className='p-6 sm:p-10 md:p-16'>
                   <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-12'>
                     {[
                       {
@@ -872,7 +933,7 @@ export default function LandingPage() {
                           animationFillMode: 'forwards'
                         }}
                       >
-                        <div className='w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white shadow-lg mb-4 group-hover/card:scale-110 group-hover/card:rotate-6 transition-all duration-500'>
+                        <div className='w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white shadow-lg mb-3 sm:mb-4 group-hover/card:scale-110 group-hover/card:rotate-6 transition-all duration-500'>
                           {item.icon}
                         </div>
                         <TextScale
@@ -903,11 +964,11 @@ export default function LandingPage() {
                             }, 800)
                           }
                         }}
-                        className='group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600 hover:from-primary-700 hover:via-primary-600 hover:to-primary-700 text-white font-bold text-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl shadow-xl shadow-primary-500/40 hover:shadow-primary-500/60 overflow-hidden'
+                        className='group relative w-full inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600 hover:from-primary-700 hover:via-primary-600 hover:to-primary-700 text-white font-bold text-lg sm:text-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl shadow-xl shadow-primary-500/40 hover:shadow-primary-500/60 overflow-hidden'
                       >
                         <div className='absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000'></div>
                         <span className='relative z-10'>Create Your Lineup</span>
-                        <RocketLaunchIcon className='relative z-10 w-7 h-7 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300' />
+                        <RocketLaunchIcon className='relative z-10 w-5 h-5 sm:w-7 sm:h-7 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300' />
                       </button>
 
                       <p className='text-sm text-gray-500 dark:text-gray-400'>
@@ -915,34 +976,34 @@ export default function LandingPage() {
                       </p>
                     </div>
 
-                    <div className='flex flex-wrap items-center justify-center gap-6 pt-6 border-t border-gray-200/50 dark:border-zinc-700/50'>
-                      <div className='flex items-center gap-2 hover:scale-110 transition-transform duration-300'>
-                        <BoltIcon className='w-5 h-5 text-primary-500 animate-pulse' />
-                        <span className='text-sm text-gray-600 dark:text-gray-400'>Instant generation</span>
+                    <div className='flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-200/50 dark:border-zinc-700/50'>
+                      <div className='flex items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300'>
+                        <BoltIcon className='w-4 h-4 sm:w-5 sm:h-5 text-primary-500 animate-pulse' />
+                        <span className='text-xs sm:text-sm text-gray-600 dark:text-gray-400'>Instant generation</span>
                       </div>
-                      <div className='flex items-center gap-2 hover:scale-110 transition-transform duration-300'>
-                        <CheckCircleIcon className='w-5 h-5 text-primary-500 animate-pulse-soft' />
-                        <span className='text-sm text-gray-600 dark:text-gray-400'>Always free</span>
+                      <div className='flex items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300'>
+                        <CheckCircleIcon className='w-4 h-4 sm:w-5 sm:h-5 text-primary-500 animate-pulse-soft' />
+                        <span className='text-xs sm:text-sm text-gray-600 dark:text-gray-400'>Always free</span>
                       </div>
-                      <div className='flex items-center gap-2 hover:scale-110 transition-transform duration-300'>
-                        <StarIcon className='w-5 h-5 text-primary-500 fill-current animate-pulse-soft' />
-                        <span className='text-sm text-gray-600 dark:text-gray-400'>Loved by developers</span>
+                      <div className='flex items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300'>
+                        <StarIcon className='w-4 h-4 sm:w-5 sm:h-5 text-primary-500 fill-current animate-pulse-soft' />
+                        <span className='text-xs sm:text-sm text-gray-600 dark:text-gray-400'>Loved by developers</span>
                       </div>
                     </div>
 
-                    <div className='pt-6'>
-                      <div className='flex items-center justify-center gap-3'>
-                        <div className='flex -space-x-2'>
+                    <div className='pt-4 sm:pt-6'>
+                      <div className='flex items-center justify-center gap-2 sm:gap-3'>
+                        <div className='flex -space-x-1.5 sm:-space-x-2'>
                           {[1, 2, 3, 4, 5].map((i) => (
                             <div
                               key={i}
-                              className='w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 border-3 border-white dark:border-zinc-800 animate-pulse-soft'
+                              className='w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 border-2 sm:border-3 border-white dark:border-zinc-800 animate-pulse-soft'
                               style={{animationDelay: `${i * 0.1}s`}}
                             />
                           ))}
                         </div>
                         <div className='text-left'>
-                          <p className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+                          <p className='text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300'>
                             {loading ? (
                               <strong className='text-primary-600 dark:text-primary-400'>Loading...</strong>
                             ) : (
@@ -951,7 +1012,7 @@ export default function LandingPage() {
                               </>
                             )}
                           </p>
-                          <p className='text-xs text-gray-500 dark:text-gray-400'>
+                          <p className='text-[10px] sm:text-xs text-gray-500 dark:text-gray-400'>
                             {loading ? 'fetching data...' : `${watchers} watching • ${forks} forks`}
                           </p>
                         </div>
