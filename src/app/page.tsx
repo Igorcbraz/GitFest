@@ -234,13 +234,28 @@ export default function LandingPage() {
     }
   }
 
+  const getBaseUrl = () => {
+    const envUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+    if (envUrl) {
+      const hasProtocol = /^https?:\/\//i.test(envUrl)
+      const base = hasProtocol ? envUrl : `https://${envUrl}`
+      return base.replace(/\/$/, '')
+    }
+    if (typeof window !== 'undefined' && window.location?.origin) {
+      return window.location.origin
+    }
+    return ''
+  }
+
   const signIn = async (OAuth: boolean) => {
     try {
       if (OAuth) {
         if (!hasSupabase || !supabase) throw new Error('Login via GitHub indisponível no momento')
+        const baseUrl = getBaseUrl()
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'github',
-          options: { redirectTo: `${window.location.origin}/home` }
+          options: { redirectTo: baseUrl ? `${baseUrl}/home` : undefined }
         })
         if (error) throw new Error(error.message)
       } else {
@@ -442,7 +457,7 @@ export default function LandingPage() {
                 <button
                   className={`w-full h-14 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 transition-all ${
                     hasSupabase
-                      ? 'bg-secondary-600 dark:bg-secondary-500 text-white hover:bg-secondary-700 dark:hover:bg-secondary-600 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                      ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/30 hover:shadow-xl hover:shadow-primary-600/40 hover:-translate-y-0.5'
                       : 'bg-gray-300 dark:bg-zinc-700 text-gray-500 cursor-not-allowed'
                   }`}
                   onClick={() => hasSupabase && signIn(true)}
