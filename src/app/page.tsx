@@ -234,18 +234,16 @@ export default function LandingPage() {
     }
   }
 
-  const getBaseUrl = () => {
-    const envUrl = process.env.NEXT_PUBLIC_SITE_URL
+  const ALLOWED_HOSTS = new Set(['git-fest.vercel.app', 'localhost'])
+  const DEFAULT_BASE_URL = 'https://git-fest.vercel.app'
 
-    if (envUrl) {
-      const hasProtocol = /^https?:\/\//i.test(envUrl)
-      const base = hasProtocol ? envUrl : `https://${envUrl}`
-      return base.replace(/\/$/, '')
-    }
+  const getBaseUrl = () => {
+    let base = DEFAULT_BASE_URL
     if (typeof window !== 'undefined' && window.location?.origin) {
-      return window.location.origin
+      const { protocol, host, hostname } = window.location
+      if (ALLOWED_HOSTS.has(hostname)) base = `${protocol}//${host}`
     }
-    return ''
+    return base.replace(/\/$/, '')
   }
 
   const signIn = async (OAuth: boolean) => {
