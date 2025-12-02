@@ -192,7 +192,7 @@ const ScrollAnimatedText = () => {
             </div>
 
             <TextFade
-              text='Scroll para navegar entre as palavras'
+              text='Scroll to navigate between words'
               className='text-sm text-gray-500 dark:text-gray-400 mt-4'
               delay={0.8}
               once={false}
@@ -534,7 +534,7 @@ export default function LandingPage() {
               <div className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-100/80 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 mb-8 shadow-lg'>
                 <SparklesIcon className='w-5 h-5 text-primary-600 dark:text-primary-400 animate-pulse-soft' />
                 <span className='text-sm font-semibold text-primary-700 dark:text-primary-300'>
-                  Descubra os Benefícios
+                  Discover the Benefits
                 </span>
               </div>
 
@@ -610,7 +610,7 @@ export default function LandingPage() {
 
                         <div className='mt-8 flex justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0'>
                           <div className='flex items-center gap-2 text-sm font-semibold text-primary-600 dark:text-primary-400'>
-                            <span>Saiba mais</span>
+                            <span>Learn more</span>
                             <ArrowRightIcon className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
                           </div>
                         </div>
@@ -672,7 +672,7 @@ export default function LandingPage() {
               <div className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary-100/80 dark:bg-secondary-900/40 backdrop-blur-sm border border-secondary-200/50 dark:border-secondary-700/50 mb-8 shadow-lg animate-bounce-soft'>
                 <HeartIcon className='w-5 h-5 text-secondary-600 dark:text-secondary-400 animate-pulse-soft' />
                 <span className='text-sm font-semibold text-secondary-700 dark:text-secondary-300'>
-                  Testemunhos Reais
+                  Real Testimonials
                 </span>
               </div>
 
@@ -687,7 +687,7 @@ export default function LandingPage() {
               </h2>
 
               <TextBlur
-                text='See what people are saying about GitFest'
+                text='See what developers are saying about GitFest'
                 className='text-xl md:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'
                 delay={0.5}
                 once={false}
@@ -812,7 +812,7 @@ export default function LandingPage() {
               <div className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-100/80 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 mb-8 shadow-lg animate-bounce-soft'>
                 <RocketLaunchIcon className='w-5 h-5 text-primary-600 dark:text-primary-400 animate-pulse-soft' />
                 <span className='text-sm font-semibold text-primary-700 dark:text-primary-300'>
-                  Junte-se à Comunidade
+                  Join the Community
                 </span>
               </div>
 
