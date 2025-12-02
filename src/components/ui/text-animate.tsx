@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { motion, Variants, useInView } from "framer-motion";
-import { useRef } from "react";
-import { cn } from "@/lib/utils";
+import { motion, Variants, useInView } from 'framer-motion'
+import { useRef } from 'react'
+import { cn } from '@/lib/utils'
 
 type TextAnimateProps = {
   text: string;
-  type?: "paragraph" | "heading";
+  type?: 'paragraph' | 'heading';
   className?: string;
   animation?: {
     hidden: { opacity: number; y?: number; x?: number };
@@ -20,21 +20,21 @@ type TextAnimateProps = {
 const defaultAnimation = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
-};
+}
 
 export function TextAnimate({
   text,
-  type = "paragraph",
+  type = 'paragraph',
   className,
   animation = defaultAnimation,
   delay = 0,
   duration = 0.5,
   once = true,
 }: TextAnimateProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.3 });
-  const words = text.split(" ");
-  const Tag = type === "heading" ? motion.h1 : motion.p;
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.3 })
+  const words = text.split(' ')
+  const Tag = type === 'heading' ? motion.h1 : motion.p
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -42,40 +42,40 @@ export function TextAnimate({
       opacity: 1,
       transition: { staggerChildren: 0.12, delayChildren: delay * i },
     }),
-  };
+  }
 
   const child: Variants = {
     visible: {
       ...animation.visible,
       transition: {
-        type: "spring",
+        type: 'spring',
         damping: 12,
         stiffness: 100,
         duration,
       },
     },
     hidden: animation.hidden,
-  };
+  }
 
   return (
     <Tag
       ref={ref}
-      className={cn("overflow-hidden", className)}
+      className={cn('overflow-hidden', className)}
       variants={container}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      initial='hidden'
+      animate={isInView ? 'visible' : 'hidden'}
     >
       {words.map((word, index) => (
         <motion.span
           key={index}
           variants={child}
-          className="inline-block mr-[0.25em]"
+          className='inline-block mr-[0.25em]'
         >
           {word}
         </motion.span>
       ))}
     </Tag>
-  );
+  )
 }
 
 export function TextFade({
@@ -91,20 +91,20 @@ export function TextFade({
   duration?: number;
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.5 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.5 })
 
   return (
     <motion.p
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ delay, duration, ease: "easeOut" }}
+      transition={{ delay, duration, ease: 'easeOut' }}
       className={className}
     >
       {text}
     </motion.p>
-  );
+  )
 }
 
 export function TextBlur({
@@ -120,9 +120,9 @@ export function TextBlur({
   duration?: number;
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.3 });
-  const words = text.split(" ");
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.3 })
+  const words = text.split(' ')
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -130,14 +130,14 @@ export function TextBlur({
       opacity: 1,
       transition: { staggerChildren: 0.12, delayChildren: delay * i },
     }),
-  };
+  }
 
   const child: Variants = {
     visible: {
       opacity: 1,
-      filter: "blur(0px)",
+      filter: 'blur(0px)',
       transition: {
-        type: "spring",
+        type: 'spring',
         damping: 12,
         stiffness: 100,
         duration,
@@ -145,29 +145,29 @@ export function TextBlur({
     },
     hidden: {
       opacity: 0,
-      filter: "blur(10px)",
+      filter: 'blur(10px)',
     },
-  };
+  }
 
   return (
     <motion.p
       ref={ref}
-      className={cn("overflow-hidden", className)}
+      className={cn('overflow-hidden', className)}
       variants={container}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      initial='hidden'
+      animate={isInView ? 'visible' : 'hidden'}
     >
       {words.map((word, index) => (
         <motion.span
           key={index}
           variants={child}
-          className="inline-block mr-[0.25em]"
+          className='inline-block mr-[0.25em]'
         >
           {word}
         </motion.span>
       ))}
     </motion.p>
-  );
+  )
 }
 
 export function TextGradient({
@@ -175,38 +175,38 @@ export function TextGradient({
   className,
   gradientClassName,
   delay = 0,
-  as = "h1",
+  as = 'h1',
   once = true,
 }: {
   text: string;
   className?: string;
   gradientClassName?: string;
   delay?: number;
-  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.5 });
-  const MotionTag = motion[as] as any;
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.5 })
+  const MotionTag = motion[as] as any
 
   return (
     <MotionTag
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ delay, duration: 0.5, ease: "easeOut" }}
-      className={cn("relative inline-block", className)}
+      transition={{ delay, duration: 0.5, ease: 'easeOut' }}
+      className={cn('relative inline-block', className)}
     >
       <span
         className={cn(
-          "bg-gradient-to-r bg-clip-text text-transparent",
+          'bg-gradient-to-r bg-clip-text text-transparent',
           gradientClassName
         )}
       >
         {text}
       </span>
     </MotionTag>
-  );
+  )
 }
 
 export function TextReveal({
@@ -220,9 +220,9 @@ export function TextReveal({
   delay?: number;
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.3 });
-  const letters = text.split("");
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.3 })
+  const letters = text.split('')
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -230,14 +230,14 @@ export function TextReveal({
       opacity: 1,
       transition: { staggerChildren: 0.03, delayChildren: delay * i },
     }),
-  };
+  }
 
   const child: Variants = {
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         damping: 12,
         stiffness: 200,
       },
@@ -246,23 +246,23 @@ export function TextReveal({
       opacity: 0,
       y: 20,
     },
-  };
+  }
 
   return (
     <motion.span
       ref={ref}
-      className={cn("overflow-hidden inline-block", className)}
+      className={cn('overflow-hidden inline-block', className)}
       variants={container}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      initial='hidden'
+      animate={isInView ? 'visible' : 'hidden'}
     >
       {letters.map((letter, index) => (
-        <motion.span key={index} variants={child} className="inline-block">
-          {letter === " " ? "\u00A0" : letter}
+        <motion.span key={index} variants={child} className='inline-block'>
+          {letter === ' ' ? '\u00A0' : letter}
         </motion.span>
       ))}
     </motion.span>
-  );
+  )
 }
 
 export function TextShimmer({
@@ -276,15 +276,15 @@ export function TextShimmer({
 }) {
   return (
     <motion.p
-      initial={{ backgroundPosition: "-200%" }}
-      animate={{ backgroundPosition: "200%" }}
+      initial={{ backgroundPosition: '-200%' }}
+      animate={{ backgroundPosition: '200%' }}
       transition={{
         repeat: Infinity,
         duration: 3,
-        ease: "linear",
+        ease: 'linear',
       }}
       className={cn(
-        "inline-block bg-gradient-to-r from-transparent via-white to-transparent bg-clip-text text-transparent",
+        'inline-block bg-gradient-to-r from-transparent via-white to-transparent bg-clip-text text-transparent',
         className
       )}
       style={{
@@ -293,45 +293,45 @@ export function TextShimmer({
     >
       {text}
     </motion.p>
-  );
+  )
 }
 
 export function TextSlide({
   text,
   className,
-  direction = "up",
+  direction = 'up',
   delay = 0,
   duration = 0.5,
   once = true,
 }: {
   text: string;
   className?: string;
-  direction?: "up" | "down" | "left" | "right";
+  direction?: 'up' | 'down' | 'left' | 'right';
   delay?: number;
   duration?: number;
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.5 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.5 })
 
   const directionOffset = {
     up: { y: 40 },
     down: { y: -40 },
     left: { x: 40 },
     right: { x: -40 },
-  };
+  }
 
   return (
     <motion.p
       ref={ref}
       initial={{ opacity: 0, ...directionOffset[direction] }}
       animate={isInView ? { opacity: 1, y: 0, x: 0 } : { opacity: 0, ...directionOffset[direction] }}
-      transition={{ delay, duration, ease: "easeOut" }}
+      transition={{ delay, duration, ease: 'easeOut' }}
       className={className}
     >
       {text}
     </motion.p>
-  );
+  )
 }
 
 export function TextRotate({
@@ -345,21 +345,21 @@ export function TextRotate({
   delay?: number;
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.5 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.5 })
 
   return (
     <motion.p
       ref={ref}
       initial={{ opacity: 0, rotateX: -90 }}
       animate={isInView ? { opacity: 1, rotateX: 0 } : { opacity: 0, rotateX: -90 }}
-      transition={{ delay, duration: 0.6, ease: "easeOut" }}
+      transition={{ delay, duration: 0.6, ease: 'easeOut' }}
       className={className}
-      style={{ transformOrigin: "center" }}
+      style={{ transformOrigin: 'center' }}
     >
       {text}
     </motion.p>
-  );
+  )
 }
 
 export function TextScale({
@@ -373,8 +373,8 @@ export function TextScale({
   delay?: number;
   once?: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.5 });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once, amount: 0.5 })
 
   return (
     <motion.p
@@ -386,5 +386,5 @@ export function TextScale({
     >
       {text}
     </motion.p>
-  );
+  )
 }

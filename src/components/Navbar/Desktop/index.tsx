@@ -1,43 +1,43 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import { InformationCircleIcon } from '@heroicons/react/24/solid';
-import { ThemeToggle } from '../../ThemeToggle';
+'use client'
+import React, { useState, useEffect } from 'react'
+import { InformationCircleIcon } from '@heroicons/react/24/solid'
+import { ThemeToggle } from '../../ThemeToggle'
 
 export const Desktop: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+      setIsScrolled(window.scrollY > 50)
+    }
 
     const checkTheme = () => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    };
+      setIsDark(document.documentElement.classList.contains('dark'))
+    }
 
-    window.addEventListener('scroll', handleScroll);
-    checkTheme();
+    window.addEventListener('scroll', handleScroll)
+    checkTheme()
 
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    const observer = new MutationObserver(checkTheme)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+      observer.disconnect()
+    }
+  }, [])
 
   return (
     <nav
-      className="fixed z-50 top-0 left-0 right-0 flex justify-center"
+      className='fixed z-50 top-0 left-0 right-0 flex justify-center'
       style={{
         transform: isScrolled ? 'translateY(1rem)' : 'translateY(0)',
         transition: 'transform 1.2s cubic-bezier(0.33, 1, 0.68, 1)'
       }}
     >
       <div
-        className="w-full"
+        className='w-full'
         style={{
           maxWidth: isScrolled ? '90rem' : '100%',
           minWidth: isScrolled ? '60rem' : 'auto',
@@ -64,42 +64,42 @@ export const Desktop: React.FC = () => {
           }}
         >
           <div
-            className="container"
+            className='container'
             style={{
               paddingLeft: isScrolled ? '2rem' : undefined,
               paddingRight: isScrolled ? '2rem' : undefined,
               transition: 'padding 1.2s cubic-bezier(0.33, 1, 0.68, 1)'
             }}
           >
-          <div className='flex items-center justify-between h-20'>
-          {/* Logo */}
-          <a href='/' className='flex items-center gap-3 group'>
-            <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center group-hover:scale-110 transition-transform'>
-              <span className="text-white font-bold text-xl">G</span>
-            </div>
-            <h1 className='text-2xl font-bold'>
-              <span className='text-gray-900 dark:text-white'>Git</span>
-              <span className='text-gradient-primary'>Fest</span>
-            </h1>
-          </a>
+            <div className='flex items-center justify-between h-20'>
+              {/*Logo */}
+              <a href='/' className='flex items-center gap-3 group'>
+                <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center group-hover:scale-110 transition-transform'>
+                  <span className='text-white font-bold text-xl'>G</span>
+                </div>
+                <h1 className='text-2xl font-bold'>
+                  <span className='text-gray-900 dark:text-white'>Git</span>
+                  <span className='text-gradient-primary'>Fest</span>
+                </h1>
+              </a>
 
-          {/* Actions */}
-          <div className='flex items-center gap-4'>
-            <a
-              href='https://github.com/Igorcbraz/GitFest#readme'
-              target='_blank'
-              rel='noreferrer'
-              className='hidden md:flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-300 font-medium transition-colors'
-            >
-              <InformationCircleIcon className='w-5 h-5' />
-              <span>About</span>
-            </a>
-            <ThemeToggle />
-          </div>
-          </div>
+              {/*Actions */}
+              <div className='flex items-center gap-4'>
+                <a
+                  href='https://github.com/Igorcbraz/GitFest#readme'
+                  target='_blank'
+                  rel='noreferrer'
+                  className='hidden md:flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-300 font-medium transition-colors'
+                >
+                  <InformationCircleIcon className='w-5 h-5' />
+                  <span>About</span>
+                </a>
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}

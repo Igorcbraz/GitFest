@@ -1,14 +1,12 @@
-import React from 'react';
-import { ThemeToggle } from '../../components/ThemeToggle';
-import { ArrowLeftOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import React from 'react'
+import { ThemeToggle } from '../../components/ThemeToggle'
+import { ArrowLeftOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 
 export default function HeaderBar({ username, bio, onLogout }: { username: string; bio?: string | null; onLogout: () => void }) {
   return (
     <header className='sticky top-0 z-40 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-2xl border-b border-gray-200/50 dark:border-zinc-800/50 animate-fade-in-down shadow-sm'>
       <div className='container max-w-7xl'>
         <div className='flex justify-between items-center h-18 gap-6 py-3'>
-
-          {/* User Info */}
           <div className='flex items-center gap-4 flex-1 min-w-0 group'>
             <div className='relative'>
               <div className='absolute inset-0 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-500'></div>
@@ -27,8 +25,6 @@ export default function HeaderBar({ username, bio, onLogout }: { username: strin
               )}
             </div>
           </div>
-
-          {/* Actions */}
           <div className='flex items-center gap-3 flex-shrink-0'>
             <ThemeToggle />
             <button
@@ -42,6 +38,6 @@ export default function HeaderBar({ username, bio, onLogout }: { username: strin
         </div>
       </div>
     </header>
-  );
+  )
 }
 

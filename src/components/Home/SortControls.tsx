@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowDownIcon, StarIcon, ClockIcon, PencilSquareIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import React from 'react'
+import { ArrowDownIcon, StarIcon, ClockIcon, PencilSquareIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 
 type Filters = {
   theme: 'dark' | 'light';
@@ -15,7 +15,7 @@ export default function SortControls({ filters, setFilters }: { filters: Filters
     { value: 'created', label: 'Created', icon: ClockIcon },
     { value: 'updated', label: 'Updated', icon: PencilSquareIcon },
     { value: 'full_name', label: 'Name', icon: DocumentTextIcon },
-  ] as const;
+  ] as const
 
   return (
     <div className='space-y-3'>
@@ -53,5 +53,5 @@ export default function SortControls({ filters, setFilters }: { filters: Filters
         ))}
       </div>
     </div>
-  );
+  )
 }

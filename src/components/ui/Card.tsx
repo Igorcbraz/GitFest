@@ -1,9 +1,7 @@
-import React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import React from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
 
-// Definição das variantes do card usando CVA
 const cardVariants = cva(
-  // Classes base para todos os cards
   'rounded-xl transition-all duration-base',
   {
     variants: {
@@ -38,16 +36,14 @@ const cardVariants = cva(
       hover: 'none',
     },
   }
-);
+)
 
-// Interface das props do card
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {
   asChild?: boolean;
 }
 
-// Componente Card principal
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, padding, hover, ...props }, ref) => {
     return (
@@ -56,12 +52,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         className={cardVariants({ variant, padding, hover, className })}
         {...props}
       />
-    );
+    )
   }
-);
-Card.displayName = 'Card';
+)
+Card.displayName = 'Card'
 
-// Componente CardHeader
 const cardHeaderVariants = cva(
   'flex flex-col space-y-1.5',
   {
@@ -82,7 +77,7 @@ const cardHeaderVariants = cva(
       border: 'none',
     },
   }
-);
+)
 
 export interface CardHeaderProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -96,12 +91,11 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
         className={cardHeaderVariants({ padding, border, className })}
         {...props}
       />
-    );
+    )
   }
-);
-CardHeader.displayName = 'CardHeader';
+)
+CardHeader.displayName = 'CardHeader'
 
-// Componente CardTitle
 const CardTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
@@ -111,10 +105,9 @@ const CardTitle = React.forwardRef<
     className={`text-2xl font-semibold leading-none tracking-tight text-text-primary ${className || ''}`}
     {...props}
   />
-));
-CardTitle.displayName = 'CardTitle';
+))
+CardTitle.displayName = 'CardTitle'
 
-// Componente CardDescription
 const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -124,10 +117,9 @@ const CardDescription = React.forwardRef<
     className={`text-sm text-text-secondary ${className || ''}`}
     {...props}
   />
-));
-CardDescription.displayName = 'CardDescription';
+))
+CardDescription.displayName = 'CardDescription'
 
-// Componente CardContent
 const cardContentVariants = cva(
   '',
   {
@@ -143,7 +135,7 @@ const cardContentVariants = cva(
       padding: 'md',
     },
   }
-);
+)
 
 export interface CardContentProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -157,12 +149,11 @@ const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
         className={cardContentVariants({ padding, className })}
         {...props}
       />
-    );
+    )
   }
-);
-CardContent.displayName = 'CardContent';
+)
+CardContent.displayName = 'CardContent'
 
-// Componente CardFooter
 const cardFooterVariants = cva(
   'flex items-center',
   {
@@ -183,7 +174,7 @@ const cardFooterVariants = cva(
       border: 'none',
     },
   }
-);
+)
 
 export interface CardFooterProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -197,12 +188,11 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
         className={cardFooterVariants({ padding, border, className })}
         {...props}
       />
-    );
+    )
   }
-);
-CardFooter.displayName = 'CardFooter';
+)
+CardFooter.displayName = 'CardFooter'
 
-// Componente CardImage - para imagens dentro de cards
 const CardImage = React.forwardRef<
   HTMLImageElement,
   React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -216,10 +206,9 @@ const CardImage = React.forwardRef<
     } ${className || ''}`}
     {...props}
   />
-));
-CardImage.displayName = 'CardImage';
+))
+CardImage.displayName = 'CardImage'
 
-// Card com ícone - variante específica
 export interface IconCardProps extends CardProps {
   icon: React.ReactNode;
   title: string;
@@ -236,26 +225,25 @@ const IconCard = React.forwardRef<HTMLDivElement, IconCardProps>(
       error: 'bg-state-error-light text-state-error-dark',
       info: 'bg-state-info-light text-state-info-dark',
       warning: 'bg-state-warning-light text-state-warning-dark',
-    };
+    }
 
     return (
-      <Card ref={ref} variant="elevated" hover="lift" className={className} {...props}>
+      <Card ref={ref} variant='elevated' hover='lift' className={className} {...props}>
         <CardHeader>
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${iconColorClasses[iconColor]}`}>
             {icon}
           </div>
         </CardHeader>
         <CardContent>
-          <CardTitle className="text-xl mb-2">{title}</CardTitle>
+          <CardTitle className='text-xl mb-2'>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardContent>
       </Card>
-    );
+    )
   }
-);
-IconCard.displayName = 'IconCard';
+)
+IconCard.displayName = 'IconCard'
 
-// Card de estatísticas - variante específica
 export interface StatCardProps extends CardProps {
   label: string;
   value: string | number;
@@ -270,15 +258,15 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
       increase: 'text-state-success',
       decrease: 'text-state-error',
       neutral: 'text-text-secondary',
-    };
+    }
 
     return (
-      <Card ref={ref} variant="elevated" className={className} {...props}>
-        <CardContent className="p-6">
-          <div className="flex justify-between items-start">
+      <Card ref={ref} variant='elevated' className={className} {...props}>
+        <CardContent className='p-6'>
+          <div className='flex justify-between items-start'>
             <div>
-              <p className="text-sm text-text-secondary mb-1">{label}</p>
-              <p className="text-3xl font-bold text-text-primary">{value}</p>
+              <p className='text-sm text-text-secondary mb-1'>{label}</p>
+              <p className='text-3xl font-bold text-text-primary'>{value}</p>
               {change && (
                 <p className={`text-sm mt-2 ${changeColors[changeType]}`}>
                   {change}
@@ -286,17 +274,17 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
               )}
             </div>
             {icon && (
-              <div className="p-3 bg-primary-100 text-primary-600 rounded-lg">
+              <div className='p-3 bg-primary-100 text-primary-600 rounded-lg'>
                 {icon}
               </div>
             )}
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
-);
-StatCard.displayName = 'StatCard';
+)
+StatCard.displayName = 'StatCard'
 
 export {
   Card,
@@ -309,4 +297,4 @@ export {
   IconCard,
   StatCard,
   cardVariants,
-};
+}

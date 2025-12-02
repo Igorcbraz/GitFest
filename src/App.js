@@ -1,15 +1,11 @@
-import React, { createContext, useReducer } from 'react'
-import { ToastContainer } from 'react-toastify'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { createContext, useReducer } from 'react'
+import { createBrowserRouter } from 'react-router-dom'
 
 import { routes } from './routes'
 import { initialState, reducer } from './store/reducer'
 
 import './global.css'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 
 export const AuthContext = createContext()
 

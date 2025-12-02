@@ -1,13 +1,12 @@
-import React from 'react';
-import { animated, useSpring, config } from '@react-spring/web';
-import { DarkTemplate } from '../../components/Templates/Dark';
+import { animated, useSpring, config } from '@react-spring/web'
+import { DarkTemplate } from '../../components/Templates/Dark'
 
 type XYS = [number, number, number];
-const calc = (x: number, y: number): XYS => [-(y - window.innerHeight / 2) / 120, (x - window.innerWidth / 5) / 120, 1];
-const trans = (x: number, y: number, s: number) => `perspective(1200px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
+const calc = (x: number, y: number): XYS => [-(y - window.innerHeight / 2) / 120, (x - window.innerWidth / 5) / 120, 1]
+const trans = (x: number, y: number, s: number) => `perspective(1200px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
 export default function TemplatePreview({ username, data, invertColors }: { username: string; data: string[]; invertColors: boolean }) {
-  const [props, set] = useSpring(() => ({ xys: [0, 0, 1] as XYS, config: config.gentle }));
+  const [props, set] = useSpring(() => ({ xys: [0, 0, 1] as XYS, config: config.gentle }))
 
   return (
     <div className='flex justify-center items-center w-full h-full'>
@@ -27,5 +26,5 @@ export default function TemplatePreview({ username, data, invertColors }: { user
         </div>
       </animated.div>
     </div>
-  );
+  )
 }

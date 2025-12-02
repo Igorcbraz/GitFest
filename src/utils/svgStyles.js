@@ -1,4 +1,3 @@
-// Copy of styles to use when download svg
 export const styles = {
   template1: `
     @font-face {

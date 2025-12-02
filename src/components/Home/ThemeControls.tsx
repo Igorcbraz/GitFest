@@ -1,5 +1,5 @@
-import React from 'react';
-import { MoonIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import React from 'react'
+import { MoonIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 
 type Filters = {
   theme: 'dark' | 'light';
@@ -51,5 +51,5 @@ export default function ThemeControls({ filters, setFilters }: { filters: Filter
         </div>
       </div>
     </div>
-  );
+  )
 }

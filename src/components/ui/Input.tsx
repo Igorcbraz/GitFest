@@ -1,9 +1,7 @@
-import React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import React from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
 
-// Definição das variantes do input usando CVA
 const inputVariants = cva(
-  // Classes base para todos os inputs
   'w-full px-4 py-2 border rounded-lg font-normal transition-all duration-base placeholder:text-text-muted focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
@@ -38,9 +36,8 @@ const inputVariants = cva(
       rounded: 'lg',
     },
   }
-);
+)
 
-// Interface das props do input
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariants> {
@@ -52,7 +49,6 @@ export interface InputProps
   containerClassName?: string;
 }
 
-// Componente Input
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -72,32 +68,31 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    // Se houver erro, usar a variante de erro
-    const inputVariant = error ? 'error' : variant;
+    const inputVariant = error ? 'error' : variant
 
     return (
       <div className={`flex flex-col gap-1.5 ${containerClassName || ''}`}>
-        {/* Label */}
+        {/*Label */}
         {label && (
           <label
             htmlFor={props.id}
-            className="text-sm font-medium text-text-primary"
+            className='text-sm font-medium text-text-primary'
           >
             {label}
-            {props.required && <span className="text-state-error ml-1">*</span>}
+            {props.required && <span className='text-state-error ml-1'>*</span>}
           </label>
         )}
 
-        {/* Container do input com ícones */}
-        <div className="relative">
-          {/* Ícone esquerdo */}
+        {/*Container do input com ícones */}
+        <div className='relative'>
+          {/*Ícone esquerdo */}
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+            <div className='absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none'>
               {leftIcon}
             </div>
           )}
 
-          {/* Input */}
+          {/*Input */}
           <input
             type={type}
             className={inputVariants({
@@ -115,53 +110,52 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
 
-          {/* Ícone direito */}
+          {/*Ícone direito */}
           {rightIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+            <div className='absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none'>
               {rightIcon}
             </div>
           )}
         </div>
 
-        {/* Mensagem de erro */}
+        {/*Mensagem de erro */}
         {error && (
           <p
             id={`${props.id}-error`}
-            className="text-sm text-state-error flex items-center gap-1"
+            className='text-sm text-state-error flex items-center gap-1'
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4"
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 20 20'
+              fill='currentColor'
+              className='w-4 h-4'
             >
               <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
-                clipRule="evenodd"
+                fillRule='evenodd'
+                d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z'
+                clipRule='evenodd'
               />
             </svg>
             {error}
           </p>
         )}
 
-        {/* Texto auxiliar */}
+        {/*Texto auxiliar */}
         {helperText && !error && (
           <p
             id={`${props.id}-helper`}
-            className="text-sm text-text-secondary"
+            className='text-sm text-text-secondary'
           >
             {helperText}
           </p>
         )}
       </div>
-    );
+    )
   }
-);
+)
 
-Input.displayName = 'Input';
+Input.displayName = 'Input'
 
-// Componente Textarea
 const textareaVariants = cva(
   'w-full px-4 py-2 border rounded-lg font-normal transition-all duration-base placeholder:text-text-muted focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed resize-y',
   {
@@ -187,7 +181,7 @@ const textareaVariants = cva(
       size: 'md',
     },
   }
-);
+)
 
 export interface TextareaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>,
@@ -213,17 +207,17 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
-    const textareaVariant = error ? 'error' : variant;
+    const textareaVariant = error ? 'error' : variant
 
     return (
       <div className={`flex flex-col gap-1.5 ${containerClassName || ''}`}>
         {label && (
           <label
             htmlFor={props.id}
-            className="text-sm font-medium text-text-primary"
+            className='text-sm font-medium text-text-primary'
           >
             {label}
-            {props.required && <span className="text-state-error ml-1">*</span>}
+            {props.required && <span className='text-state-error ml-1'>*</span>}
           </label>
         )}
 
@@ -245,18 +239,18 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {error && (
           <p
             id={`${props.id}-error`}
-            className="text-sm text-state-error flex items-center gap-1"
+            className='text-sm text-state-error flex items-center gap-1'
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4"
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 20 20'
+              fill='currentColor'
+              className='w-4 h-4'
             >
               <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
-                clipRule="evenodd"
+                fillRule='evenodd'
+                d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z'
+                clipRule='evenodd'
               />
             </svg>
             {error}
@@ -266,16 +260,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {helperText && !error && (
           <p
             id={`${props.id}-helper`}
-            className="text-sm text-text-secondary"
+            className='text-sm text-text-secondary'
           >
             {helperText}
           </p>
         )}
       </div>
-    );
+    )
   }
-);
+)
 
-Textarea.displayName = 'Textarea';
+Textarea.displayName = 'Textarea'
 
-export { Input, inputVariants, Textarea, textareaVariants };
+export { Input, inputVariants, Textarea, textareaVariants }

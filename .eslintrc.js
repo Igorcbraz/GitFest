@@ -12,5 +12,9 @@ module.exports = {
     indent: ['error', 2],
     'react/forbid-prop-types': 0,
     'react/prop-types': 0,
+    semi: ['error', 'never'],
+    'no-inline-comments': 'error',
+    'no-warning-comments': ['error', { terms: ['todo', 'fixme', 'hack'], location: 'anywhere' }],
+    'spaced-comment': ['error', 'never'],
   }
-};
+}

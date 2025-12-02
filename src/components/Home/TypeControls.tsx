@@ -1,5 +1,5 @@
-import React from 'react';
-import { UserIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import React from 'react'
+import { UserIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 
 export default function TypeControls({ selected, onToggle }: { selected: string[]; onToggle: (type: string) => void }) {
   return (
@@ -35,5 +35,5 @@ export default function TypeControls({ selected, onToggle }: { selected: string[
         </button>
       </div>
     </div>
-  );
+  )
 }

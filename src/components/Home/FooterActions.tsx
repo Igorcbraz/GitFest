@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import React from 'react'
+import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 
 export default function FooterActions({ onClear, onDownload }: { onClear: () => void; onDownload: () => void }) {
   return (
@@ -23,6 +23,6 @@ export default function FooterActions({ onClear, onDownload }: { onClear: () => 
         <span className='relative z-10'>Reset Filters</span>
       </button>
     </div>
-  );
+  )
 }
 

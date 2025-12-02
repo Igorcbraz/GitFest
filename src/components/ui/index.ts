@@ -2,7 +2,7 @@ export {
   Button,
   buttonVariants,
   type ButtonProps
-} from './Button';
+} from './Button'
 
 export {
   Input,
@@ -11,7 +11,7 @@ export {
   textareaVariants,
   type InputProps,
   type TextareaProps
-} from './Input';
+} from './Input'
 
 export {
   Card,
@@ -30,7 +30,7 @@ export {
   type CardFooterProps,
   type IconCardProps,
   type StatCardProps
-} from './Card';
+} from './Card'
 
 export {
   Navbar,
@@ -42,10 +42,10 @@ export {
   type NavbarProps,
   type NavbarSimpleProps,
   type NavItem
-} from './Navbar';
+} from './Navbar'
 
 export {
   ScrollVelocity,
   ParallaxText
-} from './scroll-velocity';
+} from './scroll-velocity'
 
