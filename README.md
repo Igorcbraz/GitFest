@@ -104,22 +104,7 @@ Deploy on any Next.js compatible platform (Vercel, Netlify with Next adapter, et
 
 ## Related
 
-<<<<<<< Updated upstream
 [Instafest](https://www.instafest.app/) - Version to create lineup by your top songs
-=======
-[Instafest](https://www.instafest.app/) - Version to create festival lineup by your top songs
-
-[Receiptify](https://receiptify.herokuapp.com/) - Get most played tracks in a Receipt format
-
-## You may also like...
-
-- [Calculator](https://github.com/Igorcbraz/Calculadora) - Explain prefer-color-scheme with calculator project
-- [GitFest Article](https://medium.com/@igorcbraz/create-a-festival-lineup-with-your-github-repositories-49229026f042) - Medium post talking more about GitFest
-
-## License
-
-MIT
->>>>>>> Stashed changes
 
 ## Support
 
