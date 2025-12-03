@@ -25,6 +25,7 @@ import { Github } from '../components/Github'
 import { Footer } from '../components/Footer'
 import { TextAnimate, TextBlur, TextGradient, TextReveal, TextSlide, TextFade, TextRotate, TextScale, TextShimmer } from '../components/ui/text-animate'
 import { ScrollVelocity } from '../components/ui/scroll-velocity'
+import TestimonialsRaw from '../data/testimonials.json'
 
 const calc = (x: number, y: number) => [-(y - window.innerHeight / 2) / 60, (x - window.innerWidth / 2) / 60, 1.02]
 const trans = (x: number, y: number, s: number) => `perspective(1000px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
@@ -350,51 +351,7 @@ export default function LandingPage() {
     }
   ]
 
-  const testimonials = [
-    {
-      name: 'Alex Chen',
-      role: 'Full Stack Developer',
-      content: 'GitFest made my GitHub profile stand out! Got more interview requests after sharing my lineup on LinkedIn.',
-      avatar: 'AC',
-      gradient: 'from-primary-500 to-primary-600'
-    },
-    {
-      name: 'Sarah Miller',
-      role: 'Open Source Maintainer',
-      content: 'Love how easy it is to showcase my projects. The festival theme is genius and always starts conversations!',
-      avatar: 'SM',
-      gradient: 'from-secondary-500 to-secondary-600'
-    },
-    {
-      name: 'David Kim',
-      role: 'Frontend Engineer',
-      content: 'Best way to visualize my coding journey. My team loved it and now everyone is creating their own!',
-      avatar: 'DK',
-      gradient: 'from-primary-600 to-secondary-600'
-    },
-    {
-      name: 'Emma Rodriguez',
-      role: 'Software Engineer',
-      content: 'The visual representation of my work is stunning. It\'s like my repos are headlining their own festival!',
-      avatar: 'ER',
-      gradient: 'from-secondary-500 to-primary-500'
-    },
-    {
-      name: 'Michael Zhang',
-      role: 'DevOps Engineer',
-      content: 'Simple, elegant, and effective. GitFest transformed how I present my projects to potential employers.',
-      avatar: 'MZ',
-      gradient: 'from-primary-500 to-secondary-500'
-    },
-    {
-      name: 'Lisa Johnson',
-      role: 'UI/UX Designer',
-      content: 'As a designer, I appreciate beautiful things. GitFest delivers on both aesthetics and functionality!',
-      avatar: 'LJ',
-      gradient: 'from-secondary-600 to-primary-600'
-    }
-  ]
-
+  const testimonials = JSON.parse(JSON.stringify(TestimonialsRaw))
   return (
     <div className='min-h-screen bg-gradient-to-b from-white via-primary-50/10 to-white dark:from-zinc-900 dark:via-zinc-800/30 dark:to-zinc-900 relative overflow-hidden'>
       <div className='fixed inset-0 pointer-events-none opacity-30 dark:opacity-20'>

@@ -1,44 +1,44 @@
 [
   {
-    "name": "Alex Chen",
-    "role": "Full Stack Developer",
-    "content": "GitFest made my GitHub profile stand out! Got more interview requests after sharing my lineup on LinkedIn.",
-    "avatar": "AC",
+    "name": "Luis Fernando",
+    "role": "Senior .Net Developer",
+    "content": "It's simple to use and beautiful to see, amazing for showcasing my projects!",
+    "avatar": "LF",
     "gradient": "from-primary-500 to-primary-600"
   },
   {
-    "name": "Sarah Miller",
-    "role": "Open Source Maintainer",
+    "name": "Gabriel Lima",
+    "role": "Data analyst & Film enthusiast",
     "content": "Love how easy it is to showcase my projects. The festival theme is genius and always starts conversations!",
-    "avatar": "SM",
+    "avatar": "GL",
     "gradient": "from-secondary-500 to-secondary-600"
   },
   {
-    "name": "David Kim",
-    "role": "Frontend Engineer",
-    "content": "Best way to visualize my coding journey. My team loved it and now everyone is creating their own!",
-    "avatar": "DK",
+    "name": "Kaike Rocha",
+    "role": "ASP specialist",
+    "content": "Git-fest is an excellent tool for monitoring multiple projects simultaneously. Plus, the interface is incredibly sleek and visually appealing.",
+    "avatar": "KR",
     "gradient": "from-primary-600 to-secondary-600"
   },
   {
-    "name": "Emma Rodriguez",
-    "role": "Software Engineer",
+    "name": "Pedro Fonseca",
+    "role": "Enthusiast of Low-Level Programming",
     "content": "The visual representation of my work is stunning. It's like my repos are headlining their own festival!",
-    "avatar": "ER",
+    "avatar": "PF",
     "gradient": "from-secondary-500 to-primary-500"
   },
   {
-    "name": "Michael Zhang",
-    "role": "DevOps Engineer",
+    "name": "Marlon Raul",
+    "role": "Full Stack Developer",
     "content": "Simple, elegant, and effective. GitFest transformed how I present my projects to potential employers.",
-    "avatar": "MZ",
+    "avatar": "MR",
     "gradient": "from-primary-500 to-secondary-500"
   },
   {
-    "name": "Lisa Johnson",
-    "role": "UI/UX Designer",
-    "content": "As a designer, I appreciate beautiful things. GitFest delivers on both aesthetics and functionality!",
-    "avatar": "LJ",
+    "name": "Luana Yasmim",
+    "role": "Full Stack Developer",
+    "content": "GitFest made it incredibly easy to showcase my projects in a visually appealing way. The festival theme adds a fun and engaging touch that really sets it apart.",
+    "avatar": "LY",
     "gradient": "from-secondary-600 to-primary-600"
   }
 ]
