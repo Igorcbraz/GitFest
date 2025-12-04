@@ -15,40 +15,40 @@ export const AuthContext = createContext<{ state: AuthState; dispatch: Dispatch<
 
 function reducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
-  case 'LOGIN': {
-    const user = { ...state, ...action.payload, isLoggedIn: true }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('user', JSON.stringify(user))
+    case 'LOGIN': {
+      const user = { ...state, ...action.payload, isLoggedIn: true }
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(user))
+      }
+      return user
     }
-    return user
-  }
-  case 'LOGOUT': {
-    if (typeof window !== 'undefined') {
-      localStorage.clear()
+    case 'LOGOUT': {
+      if (typeof window !== 'undefined') {
+        localStorage.clear()
+      }
+      return { isLoggedIn: false, githubUsername: null, theme: themePreference, isLoading: false }
     }
-    return { isLoggedIn: false, githubUsername: null, theme: themePreference, isLoading: false }
-  }
-  case 'SET_GITHUB_USERNAME': {
-    const user = { ...state, githubUsername: action.payload }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('user', JSON.stringify(user))
+    case 'SET_GITHUB_USERNAME': {
+      const user = { ...state, githubUsername: action.payload }
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(user))
+      }
+      return user
     }
-    return user
-  }
-  case 'SET_THEME': {
-    const user = { ...state, theme: action.payload }
-    if (typeof window !== 'undefined') {
-      if (user.theme === 'dark') document.documentElement.classList.add('dark')
-      else document.documentElement.classList.remove('dark')
-      localStorage.setItem('user', JSON.stringify(user))
+    case 'SET_THEME': {
+      const user = { ...state, theme: action.payload }
+      if (typeof window !== 'undefined') {
+        if (user.theme === 'dark') document.documentElement.classList.add('dark')
+        else document.documentElement.classList.remove('dark')
+        localStorage.setItem('user', JSON.stringify(user))
+      }
+      return user
     }
-    return user
-  }
-  case 'INIT_COMPLETE': {
-    return { ...state, isLoading: false }
-  }
-  default:
-    return state
+    case 'INIT_COMPLETE': {
+      return { ...state, isLoading: false }
+    }
+    default:
+      return state
   }
 }
 

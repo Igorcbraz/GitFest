@@ -510,18 +510,18 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+            <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'} max-h-[500px] sm:max-h-[550px] md:max-h-[600px] lg:max-h-[650px] xl:max-h-[700px] 2xl:max-h-[750px] flex items-center justify-center`}>
               <div className='absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl blur-3xl opacity-20'></div>
               <animated.div
                 onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calc(x, y) })}
                 onMouseLeave={() => set({ xys: [0, 0, 1] })}
                 style={{ transform: (props.xys as any).to(trans) }}
-                className='relative'
+                className='relative h-full w-auto max-w-full'
               >
                 <img
                   src={Preview.src || (Preview as any)}
                   alt='Festival lineup preview'
-                  className='w-full rounded-3xl shadow-2xl border-4 border-white dark:border-zinc-800 hover:shadow-primary-500/20 transition-shadow duration-500'
+                  className='h-full w-auto object-contain rounded-3xl shadow-2xl border-4 border-white dark:border-zinc-800 hover:shadow-primary-500/20 transition-shadow duration-500'
                 />
                 <div className='absolute inset-0 rounded-3xl bg-gradient-to-t from-black/20 to-transparent'></div>
               </animated.div>
