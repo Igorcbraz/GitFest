@@ -22,9 +22,7 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Variáveis CSS customizadas do Design System - Paleta Suavizada */
   :root {
-    /* Cores Primárias (Roxo Suave e Refinado) */
     --color-primary-50: #faf8fa;
     --color-primary-100: #f0eaf0;
     --color-primary-200: #e0d5e0;
@@ -36,7 +34,6 @@
     --color-primary-800: #4d3b4d;
     --color-primary-900: #3a2d3a;
 
-    /* Cores Secundárias (Laranja/Coral Refinado) */
     --color-secondary-50: #faf7f5;
     --color-secondary-100: #f2e8e0;
     --color-secondary-200: #e5d1c1;
@@ -49,7 +46,6 @@
     --color-secondary-900: #4a3020;
   }
 
-  /* Scrollbar customizada */
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--color-primary-200) var(--color-primary-50);
@@ -75,7 +71,6 @@
     background: var(--color-primary-300);
   }
 
-  /* Seleção de texto customizada */
   ::selection {
     background-color: var(--color-primary-200);
     color: var(--color-primary-900);
@@ -88,18 +83,15 @@
 }
 
 @layer components {
-  /* Foco acessível */
   *:focus-visible {
     @apply outline-2 outline-primary-500 outline-offset-2;
   }
 
-  /* Efeito de desfoque para fundos */
   .backdrop-blur-strong {
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }
 
-  /* Gradientes de texto */
   .text-gradient-primary {
     background: linear-gradient(
       135deg,
@@ -124,7 +116,6 @@
     -webkit-text-fill-color: transparent;
   }
 
-  /* Efeito de brilho para cards - Suavizado */
   .glow-primary {
     box-shadow: 0 0 30px rgba(157, 96, 148, 0.25);
   }
@@ -138,7 +129,6 @@
       0 0 40px rgba(157, 96, 148, 0.1);
   }
 
-  /* Layout de comparação antes/depois */
   .comparison-slider {
     position: relative;
     overflow: hidden;
@@ -182,7 +172,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  /* Utilitário para esconder scrollbar mantendo funcionalidade */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -192,14 +181,12 @@
     display: none;
   }
 
-  /* Grid responsivo para cards */
   .card-grid {
     display: grid;
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 
-  /* SVG responsivo */
   svg {
     max-width: 100%;
     height: auto;
@@ -207,7 +194,6 @@
 }
 
 @layer utilities {
-  /* Skeleton loading */
   @keyframes shimmer {
     0% {
       background-position: -1000px 0;
@@ -229,7 +215,6 @@
     animation: shimmer 2s linear infinite;
   }
 
-  /* Dark mode skeleton */
   .dark .skeleton {
     background: linear-gradient(
       to right,
@@ -240,7 +225,6 @@
     );
   }
 
-  /* Fade in animations */
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -524,7 +508,6 @@
     text-shadow: 0 0 20px rgba(149, 117, 149, 0.5);
   }
 
-  /* Spacing utilities */
   .section-spacing {
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -562,7 +545,6 @@
     }
   }
 
-  /* Glass effect */
   .glass {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
@@ -572,6 +554,11 @@
   .dark .glass {
     background: rgba(24, 24, 27, 0.8);
   }
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/fonts/HelveticaNeue-medium.otf") format("opentype");
 }
 
 @font-face {

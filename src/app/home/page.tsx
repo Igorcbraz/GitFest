@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../context/AuthContext'
 import { supabase, hasSupabase } from '../../lib/supabase'
-import { styles } from '../../utils/svgStyles'
+import { getThemeSpec } from '../../lib/templates'
 import { useRouter } from 'next/navigation'
 import TemplatePreview from '../../components/Home/TemplatePreview'
 import ThemeControls from '../../components/Home/ThemeControls'
@@ -34,7 +34,7 @@ interface Repo {
 }
 
 interface Filters {
-  theme: 'dark' | 'light';
+  theme: 'dark' | 'light' | 'gitfest-rio';
   invertColors: boolean;
   sort: 'stars' | 'created' | 'updated' | 'full_name';
   order: 'asc' | 'desc';
@@ -81,7 +81,6 @@ export default function HomePage() {
   const [username, setUsername] = useState('')
   const [info, setInfo] = useState<any>({})
 
-  const [repositories, setRepositories] = useState<Repo[]>([])
   const [filterRepositories, setFilterRepositories] = useState<string[]>([])
   const [filters, setFilters] = useState<Filters>(defaultFilters)
 
@@ -150,7 +149,6 @@ export default function HomePage() {
         const data = await safeFetchJson<any[]>(info.repos_url)
         const ordered = data.sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
         const formatted = formatRepositories(ordered)
-        setRepositories(formatted)
         setFilterRepositories(formatted.map((i) => i.name))
       } catch (error: any) {
         console.error(error)
@@ -241,16 +239,27 @@ export default function HomePage() {
       }
 
       try {
-        const [bebasDataUrl, lolaDataUrl] = await Promise.all([
-          toDataUrl('/fonts/BebasKai.otf'),
-          toDataUrl('/fonts/Lolapeluza.ttf'),
-        ])
-        let css = (styles as any).template1 as string
-        css = css.replace('url(\'../fonts/BebasKai.otf\')', `url(${bebasDataUrl})`)
-        css = css.replace('url(\'../fonts/Lolapeluza.ttf\')', `url(${lolaDataUrl})`)
-        styleTag!.textContent = css
+        const spec = getThemeSpec(filters.theme)
+
+        //Obtém o conteúdo atual da tag style
+        let css = styleTag!.textContent || ''
+
+        //Se houver fontes configuradas, converte para data URLs
+        if (spec.fonts && spec.fonts.length > 0) {
+          const fontDataUrls = await Promise.all(spec.fonts.map(f => toDataUrl(f.path)))
+
+          //Substitui os URLs das fontes por data URLs no CSS
+          spec.fonts.forEach((f, i) => {
+            const urlPattern = new RegExp(`url\\(${f.path}\\)`, 'g')
+            css = css.replace(urlPattern, `url(${fontDataUrls[i]})`)
+            //Também tenta sem os parênteses
+            css = css.replace(f.path, fontDataUrls[i])
+          })
+
+          styleTag!.textContent = css
+        }
       } catch (e) {
-        console.warn('Não foi possível embutir fontes, continuando...', e)
+        console.warn('Não foi possível embutir estilos/fontes, continuando...', e)
       }
 
       const serializer = new XMLSerializer()
@@ -456,6 +465,7 @@ export default function HomePage() {
                       username={username}
                       data={filterRepositories}
                       invertColors={filters.invertColors}
+                      theme={filters.theme}
                     />
                   </div>
                 </div>
@@ -524,7 +534,7 @@ export default function HomePage() {
                 </button>
                 <button
                   className='group relative flex items-center justify-center gap-2.5 w-full px-5 py-3.5 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 hover:from-primary-700 hover:via-primary-800 hover:to-primary-900 text-white font-bold rounded-xl transition-all text-sm shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden'
-                  onClick={() => handleDownloadSvg('dark-template')}
+                  onClick={() => handleDownloadSvg(filters.theme === 'gitfest-rio' ? 'gitfest-rio-template' : 'dark-template')}
                 >
                   <div className='absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
                   <div className='absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000'></div>

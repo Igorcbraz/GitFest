@@ -60,7 +60,31 @@ export function DarkTemplate({ username, data, className, invertColors }: DarkTe
   return (
     <svg id='dark-template' className={className} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 650' preserveAspectRatio='xMidYMid meet' width='100%' height='100%'>
       <defs>
-        <style></style>
+        <style>{`
+@font-face {
+  font-family: "Bebas Kai";
+  src: url(/fonts/BebasKai.otf) format("opentype");
+}
+@font-face {
+  font-family: "Lolapeluza";
+  src: url(/fonts/Lolapeluza.ttf) format("truetype");
+}
+.t1-background-dark { fill: url(#linear-gradient); }
+.t1-background-light { fill: url(#linear-gradient-neutral); }
+.t1-border-dark { fill: #2f2f2f; }
+.t1-border-light { fill: url(#linear-gradient); }
+.t1-lines-container { opacity: 0.2; }
+.t1-lines-dark { fill: none; stroke: #2f2f2f; stroke-width: 1px; }
+.t1-lines-light { fill: none; stroke: #ffffff34; stroke-width: 1px; }
+.t1-username, .t1-festival { font-family: 'Lolapeluza', serif; }
+.t1-festival { font-size: 123.943px; }
+.t1-square-sexta { fill: #653371; }
+.t1-repository-names { font-size: 63.488px; text-anchor: middle; font-family: "Bebas Kai", sans-serif; }
+.t1-square-sabado { fill: #b074ad; }
+.t1-square-domingo { fill: #dd9f87; }
+.t1-square-sabado, .t1-square-domingo, .t1-github, .t1-border-dark, .t1-border-light, .t1-lines-dark, .t1-lines-light, .t1-square-sexta, .t1-support-text { fill-rule: evenodd; }
+.t1-support-text, .t1-github, .t1-repository-names, .t1-username, .t1-festival, .t1-festival-line { fill: #fdf9ff; }
+        `}</style>
         <linearGradient id='linear-gradient' x1='238.5' y1='676' x2='238.5' y2='-37' gradientUnits='userSpaceOnUse'>
           <stop offset='0' stopColor='#dd9f87' />
           <stop offset='0.008' stopColor='#dd9f87' />

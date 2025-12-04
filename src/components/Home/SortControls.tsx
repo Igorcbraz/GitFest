@@ -2,7 +2,7 @@ import React from 'react'
 import { ArrowDownIcon, StarIcon, ClockIcon, PencilSquareIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 
 type Filters = {
-  theme: 'dark' | 'light';
+  theme: 'dark' | 'light' | 'gitfest-rio';
   invertColors: boolean;
   sort: 'stars' | 'created' | 'updated' | 'full_name';
   order: 'asc' | 'desc';
