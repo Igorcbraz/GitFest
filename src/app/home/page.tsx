@@ -453,10 +453,10 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:h-[calc(100vh-12rem)]'>
-            <div className='order-1 lg:order-1 flex items-center justify-center py-6 lg:py-0 lg:h-full'>
-              <div className='w-full h-full max-w-[600px] mx-auto flex items-center justify-center'>
-                <div className='group relative p-3 sm:p-4 rounded-2xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-400/40 dark:hover:border-primary-500/40 shadow-xl hover:shadow-2xl transition-all duration-700 w-full h-full max-h-[650px] lg:max-h-full flex items-center justify-center'>
+          <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] 2xl:grid-cols-[1fr_400px] gap-4 md:gap-6 lg:min-h-[calc(100vh-11rem)]'>
+            <div className='order-1 lg:order-1 flex items-center justify-center py-2 lg:py-0'>
+              <div className='w-full flex items-center justify-center'>
+                <div className='group relative p-3 md:p-4 rounded-2xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-400/40 dark:hover:border-primary-500/40 shadow-xl hover:shadow-2xl transition-all duration-700 w-full max-w-[min(90vw,320px)] md:max-w-[min(85vw,400px)] lg:max-w-[min(calc(100vh-18rem),450px)] xl:max-w-[min(calc(100vh-14rem),550px)] 2xl:max-w-[700px] aspect-[5/6.5] flex items-center justify-center'>
                   <div className='absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
                   <div className='absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
 
@@ -481,7 +481,7 @@ export default function HomePage() {
                 </h2>
               </div>
 
-              <div className='flex-1 lg:overflow-y-auto scrollbar-hide space-y-3 lg:max-h-[calc(100vh-20rem)]'>
+              <div className='flex-1 lg:overflow-y-auto scrollbar-hide space-y-2.5 md:space-y-3 lg:max-h-[calc(100vh-17rem)]'>
 
                 <div className='group relative p-4 rounded-xl bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-zinc-700/60 hover:border-primary-300/50 dark:hover:border-primary-600/50 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.01] animate-fade-in-up' style={{animationDelay: '100ms'}}>
                   <div className='absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
