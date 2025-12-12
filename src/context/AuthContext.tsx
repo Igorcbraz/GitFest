@@ -1,13 +1,11 @@
 'use client'
 import React, { createContext, useReducer, useEffect, Dispatch } from 'react'
-import type { AuthState, AuthAction } from '../../../types/auth'
-
-const themePreference = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+import type { AuthState, AuthAction } from '../../types/auth'
 
 const initialState: AuthState = {
   isLoggedIn: false,
   githubUsername: null,
-  theme: themePreference,
+  theme: 'light',
   isLoading: true,
 }
 
@@ -26,7 +24,7 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
       if (typeof window !== 'undefined') {
         localStorage.clear()
       }
-      return { isLoggedIn: false, githubUsername: null, theme: themePreference, isLoading: false }
+      return { isLoggedIn: false, githubUsername: null, theme: 'light', isLoading: false }
     }
     case 'SET_GITHUB_USERNAME': {
       const user = { ...state, githubUsername: action.payload }
@@ -38,8 +36,6 @@ function reducer(state: AuthState, action: AuthAction): AuthState {
     case 'SET_THEME': {
       const user = { ...state, theme: action.payload }
       if (typeof window !== 'undefined') {
-        if (user.theme === 'dark') document.documentElement.classList.add('dark')
-        else document.documentElement.classList.remove('dark')
         localStorage.setItem('user', JSON.stringify(user))
       }
       return user
@@ -61,7 +57,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as AuthState
-        if (parsed.theme === 'dark') document.documentElement.classList.add('dark')
         dispatch({ type: 'LOGIN', payload: parsed })
       } catch {}
     }

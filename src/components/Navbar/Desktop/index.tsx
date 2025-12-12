@@ -72,7 +72,6 @@ export const Desktop: React.FC = () => {
             }}
           >
             <div className='flex items-center justify-between h-20'>
-              {/*Logo */}
               <a href='/' className='flex items-center gap-3 group'>
                 <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center group-hover:scale-110 transition-transform'>
                   <span className='text-white font-bold text-xl'>G</span>
@@ -82,8 +81,6 @@ export const Desktop: React.FC = () => {
                   <span className='text-gradient-primary'>Fest</span>
                 </h1>
               </a>
-
-              {/*Actions */}
               <div className='flex items-center gap-4'>
                 <a
                   href='https://github.com/Igorcbraz/GitFest#readme'

@@ -1,11 +1,13 @@
 'use client'
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { animated, config, useSpring } from '@react-spring/web'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-import { AuthContext } from './context/AuthContext'
+import { AuthContext } from '../context/AuthContext'
 import { supabase, hasSupabase } from '../lib/supabase'
 import { useGitHubStats } from '../hooks/useGitHubStats'
+import { fetchUserInfo } from '../service/githubApi'
+
 import 'react-toastify/dist/ReactToastify.css'
 
 import Preview from '../assets/images/dark-template.png'
@@ -274,6 +276,7 @@ export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const { stars, forks, watchers, loading } = useGitHubStats('Igorcbraz', 'GitFest')
+  const [checkingUser, setCheckingUser] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
@@ -287,12 +290,18 @@ export default function LandingPage() {
   const { dispatch } = auth
 
   const checkUserExists = async (username: string) => {
+    setCheckingUser(true)
     try {
-      const response = await fetch('https://api.github.com/users/' + username)
-      if (response.status !== 200) throw new Error('Username not found')
+      await fetchUserInfo(username)
+      setCheckingUser(false)
       return true
     } catch (error: any) {
-      throw new Error(error.message)
+      setCheckingUser(false)
+      const msg = String(error?.message || '').toLowerCase()
+      let errMsg = 'GitHub user not found.'
+      if (msg.includes('rate limit')) errMsg = 'GitHub API rate limit exceeded. Please click "Continue with GitHub" to login via OAuth.'
+      toast.error(errMsg)
+      return false
     }
   }
 
@@ -318,12 +327,11 @@ export default function LandingPage() {
           options: { redirectTo: baseUrl ? `${baseUrl}/home` : undefined }
         })
         if (error) throw new Error(error.message)
+        dispatch({ type: 'LOGIN', payload: { isLoggedIn: true } })
       } else {
-        await checkUserExists(githubUsername)
-      }
-
-      dispatch({ type: 'LOGIN', payload: { isLoggedIn: true } })
-      if (!OAuth) {
+        const userExists = await checkUserExists(githubUsername)
+        if (!userExists) return
+        dispatch({ type: 'LOGIN', payload: { isLoggedIn: true } })
         dispatch({ type: 'SET_GITHUB_USERNAME', payload: githubUsername })
         router.push('/home')
       }
@@ -435,9 +443,9 @@ export default function LandingPage() {
               <div className={`space-y-4 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <form
                   className='flex flex-col sm:flex-row gap-3'
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault()
-                    if (githubUsername !== '') signIn(false)
+                    if (githubUsername !== '') await signIn(false)
                   }}
                 >
                   <div className='relative flex-1'>
@@ -448,18 +456,23 @@ export default function LandingPage() {
                       className='w-full h-14 px-6 rounded-2xl bg-white dark:bg-zinc-800 border-2 border-gray-200 dark:border-zinc-700 focus:border-primary-500 dark:focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20 outline-none text-gray-900 dark:text-white placeholder:text-gray-400 transition-all'
                       onChange={(e) => setGithubUsername(e.target.value)}
                       value={githubUsername}
+                      disabled={checkingUser}
                     />
                   </div>
                   <button
                     type='submit'
                     className={`h-14 px-8 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 group ${
-                      githubUsername === ''
+                      githubUsername === '' || checkingUser
                         ? 'bg-gray-300 dark:bg-zinc-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                         : 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/30 hover:shadow-xl hover:shadow-primary-600/40 hover:-translate-y-0.5'
                     }`}
-                    disabled={githubUsername === ''}
+                    disabled={githubUsername === '' || checkingUser}
                   >
-                    <span>Get Started</span>
+                    {checkingUser ? (
+                      <span className='animate-pulse'>Checking...</span>
+                    ) : (
+                      <span>Get Started</span>
+                    )}
                     <ArrowRightIcon className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                   </button>
                 </form>
@@ -984,7 +997,6 @@ export default function LandingPage() {
       </section>
 
       <Footer />
-      <ToastContainer theme='colored' position='top-right' />
     </div>
   )
 }
